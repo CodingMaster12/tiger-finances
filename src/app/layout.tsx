@@ -8,7 +8,7 @@ const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: { default: "Meridian — Market Intelligence", template: "%s · Meridian" },
+  title: { default: "Tiger Finances — Market Intelligence", template: "%s · Tiger Finances" },
   description: "Equity research for US and Canadian public companies.",
 };
 

@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-3xl">
       <Badge tone="info">Milestone 1 · Foundation</Badge>
-      <h1 className="mt-3 text-3xl font-bold tracking-tight text-brand">Meridian</h1>
+      <h1 className="mt-3 text-3xl font-bold tracking-tight text-brand">Tiger Finances</h1>
       <p className="mt-2 text-base text-muted">
         Equity research for US and Canadian public companies. Search, statements, comparisons and saved
         workspaces are being built in the next milestones.
