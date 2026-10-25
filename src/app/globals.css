@@ -1,0 +1,143 @@
+@import "tailwindcss";
+
+/*
+ * Design tokens. Light is the working theme; the dark block is staged and
+ * only activates with data-theme="dark" until the theme decision is made.
+ * Direction: clean fintech (navy + bright blue, soft cool-grey surfaces).
+ */
+:root {
+  --bg: #f5f7fa;
+  --surface: #ffffff;
+  --surface-2: #eef2f7;
+  --border: #dde3ec;
+  --border-strong: #c3ccd9;
+  --text: #1a2233;
+  --text-muted: #5b6678;
+  --text-subtle: #7b8698;
+
+  --brand: #0b2a6f;
+  --accent: #0070e0;
+  --accent-hover: #005fc0;
+  --accent-soft: #e6f1fd;
+  --on-accent: #ffffff;
+
+  --positive: #0a7a4b;
+  --positive-soft: #e3f5ec;
+  --negative: #c4262e;
+  --negative-soft: #fdeaeb;
+  --warning: #9a6200;
+  --warning-soft: #fff4de;
+  --info: #0070e0;
+  --info-soft: #e6f1fd;
+
+  --focus: #0070e0;
+  --shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06);
+  --shadow-md: 0 4px 16px rgb(16 24 40 / 0.1);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /* Chart series: stable per-company colors, distinguishable without hue alone via markers. */
+  --series-1: #0070e0;
+  --series-2: #e07b00;
+  --series-3: #7c3aed;
+  --series-benchmark: #8a94a6;
+}
+
+:root[data-theme="dark"] {
+  --bg: #0c1220;
+  --surface: #131b2e;
+  --surface-2: #1a2540;
+  --border: #26324d;
+  --border-strong: #35446a;
+  --text: #e8edf6;
+  --text-muted: #a3afc4;
+  --text-subtle: #8190aa;
+  --brand: #8db7ff;
+  --accent: #4a9bff;
+  --accent-hover: #6aaeff;
+  --accent-soft: #14305c;
+  --on-accent: #07111f;
+  --positive: #4cc38a;
+  --positive-soft: #11382a;
+  --negative: #ff7b82;
+  --negative-soft: #44181c;
+  --warning: #f0b550;
+  --warning-soft: #3b2c0e;
+  --info: #4a9bff;
+  --info-soft: #14305c;
+  --focus: #6aaeff;
+  --series-1: #4a9bff;
+  --series-2: #f0a04a;
+  --series-3: #b794f6;
+  --series-benchmark: #8190aa;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-muted: var(--text-muted);
+  --color-subtle: var(--text-subtle);
+  --color-brand: var(--brand);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-soft: var(--accent-soft);
+  --color-on-accent: var(--on-accent);
+  --color-positive: var(--positive);
+  --color-positive-soft: var(--positive-soft);
+  --color-negative: var(--negative);
+  --color-negative-soft: var(--negative-soft);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-info-soft: var(--info-soft);
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Financial figures: tabular numerals so columns align. */
+.num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
+tbody tr:hover td {
+  background: var(--surface-2);
+}
