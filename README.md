@@ -1,36 +1,39 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Tiger Finances
 
-## Getting Started
+Creating a financial analysis that focuses on business analysis which is used by possible investors/day-traders.
 
-First, run the development server:
+Equity research workspace for US and Canadian public companies, built with Next.js, TypeScript, Tailwind and Supabase.
 
+## Status
+- **Done:** design system and UI kit, tested financial calculations, accounts (register, login, password reset,
+  settings, unique usernames changeable once every 14 days), row-level security.
+- **Not yet verified:** live sign-up and login against a real Supabase project.
+- **Not built yet:** data providers, company search and research pages, comparison, watchlists and notes.
+
+See [docs/NEXT_STEPS.md](docs/NEXT_STEPS.md) for the owner checklist.
+
+## Setup
+1. Supabase: [docs/SUPABASE_SETUP.md](docs/SUPABASE_SETUP.md)
+2. Local env: copy `.env.example` to `.env.local` and fill it in. Never commit real keys.
+3. Deploy: [docs/VERCEL_DEPLOY.md](docs/VERCEL_DEPLOY.md)
+
+## Develop
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev         # http://localhost:3000
+npm run lint
+npm run typecheck
+npm test            # unit tests (Vitest)
+npm run test:db     # applies migrations to a throwaway local Postgres and runs the RLS tests
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Layout
+- `supabase/migrations/` database schema and row-level security
+- `supabase/tests/` database tests (RLS, ownership, username cooldown)
+- `src/proxy.ts` session refresh and route protection (the database is the real authority)
+- `src/lib/finance/` pure, tested financial calculations
+- `src/components/ui/` design-system components; tokens in `src/app/globals.css`
+- `/styleguide` visual reference
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Theme: light only for now (dark tokens are staged, no setting yet).
