@@ -10,6 +10,8 @@ import { FormMessage } from "./form-message";
 export function RegisterForm() {
   const [state, action, pending] = useActionState(register, {});
   const [usernameError, setUsernameError] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const seq = useRef(0);
 
   async function validateUsername(value: string) {
@@ -24,7 +26,7 @@ export function RegisterForm() {
   return (
     <form action={action} className="space-y-4" noValidate>
       <FormMessage state={state} />
-      <TextField label="Email" name="email" type="email" autoComplete="email" inputMode="email" required error={state.fieldErrors?.email} />
+      <TextField label="Email" name="email" type="email" autoComplete="email" inputMode="email" required value={email} onChange={(e) => setEmail(e.target.value)} error={state.fieldErrors?.email} />
       <TextField
         label="Username"
         name="username"
@@ -32,6 +34,8 @@ export function RegisterForm() {
         autoCapitalize="none"
         spellCheck={false}
         required
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
         hint="3–20 letters, numbers or underscores. You can change it once every 14 days."
         error={state.fieldErrors?.username ?? usernameError ?? undefined}
         onBlur={(e) => validateUsername(e.target.value)}
