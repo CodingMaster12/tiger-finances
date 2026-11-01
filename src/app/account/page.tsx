@@ -31,6 +31,10 @@ async function AccountBody({ searchParams }: { searchParams: PageProps<"/account
     supabase.from("user_preferences").select("default_market, default_comparison_range").maybeSingle(),
   ]);
 
+  // A new sign-in has a new session id, so the forms below always start from a clean state.
+  const { data: claims } = await supabase.auth.getClaims();
+  const sessionKey = String(claims?.claims?.session_id ?? auth.user.id);
+
   const sp = await searchParams;
   const nextChange = nextUsernameChange(profile?.username_changed_at);
 
@@ -44,6 +48,7 @@ async function AccountBody({ searchParams }: { searchParams: PageProps<"/account
       <Card>
         <CardHeader title="Profile" />
         <ProfileForm
+          key={`profile-${sessionKey}`}
           username={profile?.username ?? ""}
           displayName={profile?.display_name ?? ""}
           email={auth.user.email ?? ""}
@@ -52,15 +57,15 @@ async function AccountBody({ searchParams }: { searchParams: PageProps<"/account
       </Card>
       <Card>
         <CardHeader title="Preferences" subtitle="Defaults for search and comparisons." />
-        <PreferencesForm market={prefs?.default_market ?? "ALL"} range={prefs?.default_comparison_range ?? "1Y"} />
+        <PreferencesForm key={`prefs-${sessionKey}`} market={prefs?.default_market ?? "ALL"} range={prefs?.default_comparison_range ?? "1Y"} />
       </Card>
       <Card>
         <CardHeader title="Security" subtitle="Changing your password requires your current one." />
-        <PasswordForm />
+        <PasswordForm key={`password-${sessionKey}`} />
       </Card>
       <Card>
         <CardHeader title="Delete account" />
-        <DeleteAccount />
+        <DeleteAccount key={`delete-${sessionKey}`} />
       </Card>
     </div>
   );

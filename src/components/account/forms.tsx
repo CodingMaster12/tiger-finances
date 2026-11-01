@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Dialog } from "@/components/ui/dialog";
 import { TextField } from "@/components/ui/text-field";
 import { useToast } from "@/components/ui/toast";
+import { useHardRedirect } from "@/lib/use-hard-redirect";
+import { usePasswordPair } from "@/lib/use-password-pair";
 import type { FormState } from "@/lib/validation/auth";
 
 /** Shows a toast when a form action reports success. */
@@ -76,14 +78,15 @@ export function PreferencesForm({ market, range }: { market: string; range: stri
 
 export function PasswordForm() {
   const [state, action, pending] = useActionState(changePassword, {});
+  const pw = usePasswordPair();
   useSuccessToast(state);
   return (
     <form action={action} className="space-y-4 p-5" noValidate>
       {!state.ok && <FormMessage state={state} />}
       <PasswordField label="Current password" name="currentPassword" autoComplete="current-password" error={state.fieldErrors?.currentPassword} />
-      <PasswordField label="New password" name="password" autoComplete="new-password" showRules error={state.fieldErrors?.password} />
-      <PasswordField label="Confirm new password" name="confirmPassword" autoComplete="new-password" error={state.fieldErrors?.confirmPassword} />
-      <Button type="submit" loading={pending}>{pending ? "Updating" : "Change password"}</Button>
+      <PasswordField label="New password" name="password" autoComplete="new-password" showRules onValueChange={pw.setPassword} error={state.fieldErrors?.password} />
+      <PasswordField label="Confirm new password" name="confirmPassword" autoComplete="new-password" onValueChange={pw.setConfirm} error={state.fieldErrors?.confirmPassword} />
+      <Button type="submit" loading={pending} disabled={!pw.valid}>{pending ? "Updating" : "Change password"}</Button>
     </form>
   );
 }
@@ -91,6 +94,7 @@ export function PasswordForm() {
 export function DeleteAccount() {
   const [open, setOpen] = useState(false);
   const [state, action, pending] = useActionState(deleteAccount, {});
+  useHardRedirect(state);
   return (
     <div className="p-5">
       <p className="text-sm text-muted">

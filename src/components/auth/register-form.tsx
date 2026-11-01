@@ -2,6 +2,8 @@
 
 import { useActionState, useRef, useState } from "react";
 import { checkUsername, register } from "@/app/auth/actions";
+import { useHardRedirect } from "@/lib/use-hard-redirect";
+import { usePasswordPair } from "@/lib/use-password-pair";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
 import { PasswordField } from "./password-field";
@@ -12,6 +14,8 @@ export function RegisterForm() {
   const [usernameError, setUsernameError] = useState<string | null>(null);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
+  const pw = usePasswordPair();
+  useHardRedirect(state);
   const seq = useRef(0);
 
   async function validateUsername(value: string) {
@@ -21,7 +25,7 @@ export function RegisterForm() {
     if (id === seq.current) setUsernameError(result);
   }
 
-  if (state.ok) return <FormMessage state={state} />;
+  if (state.ok && !state.redirectTo) return <FormMessage state={state} />;
 
   return (
     <form action={action} className="space-y-4" noValidate>
@@ -40,9 +44,9 @@ export function RegisterForm() {
         error={state.fieldErrors?.username ?? usernameError ?? undefined}
         onBlur={(e) => validateUsername(e.target.value)}
       />
-      <PasswordField label="Password" name="password" autoComplete="new-password" required showRules error={state.fieldErrors?.password} />
-      <PasswordField label="Confirm password" name="confirmPassword" autoComplete="new-password" required error={state.fieldErrors?.confirmPassword} />
-      <Button type="submit" loading={pending} className="w-full">{pending ? "Creating account" : "Create account"}</Button>
+      <PasswordField label="Password" name="password" autoComplete="new-password" required showRules onValueChange={pw.setPassword} error={state.fieldErrors?.password} />
+      <PasswordField label="Confirm password" name="confirmPassword" autoComplete="new-password" required onValueChange={pw.setConfirm} error={state.fieldErrors?.confirmPassword} />
+      <Button type="submit" loading={pending} disabled={!pw.valid} className="w-full">{pending ? "Creating account" : "Create account"}</Button>
       <p className="text-xs text-subtle">
         By creating an account you agree to the terms and privacy policy once they are published.
       </p>

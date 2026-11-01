@@ -2,13 +2,14 @@
 
 import { ChevronDown, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { logout } from "@/app/auth/actions";
 
 export function AccountMenu({ initials, name, email }: { initials: string; name: string; email: string }) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const [signingOut, startSignOut] = useTransition();
 
   useEffect(() => {
     if (!open) return;
@@ -51,9 +52,19 @@ export function AccountMenu({ initials, name, email }: { initials: string; name:
           <Link role="menuitem" href="/account" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-surface-2">
             <Settings className="size-4 text-muted" aria-hidden /> Account settings
           </Link>
-          <form action={logout}>
-            <button role="menuitem" type="submit" className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-surface-2">
-              <LogOut className="size-4 text-muted" aria-hidden /> Sign out
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              startSignOut(async () => {
+                await logout();
+                // Intentional full page load: Next keeps hidden pages' state alive, which would leak signed-in UI state.
+                // eslint-disable-next-line @next/next/no-location-assign-relative-destination
+                window.location.assign("/login");
+              });
+            }}
+          >
+            <button role="menuitem" type="submit" disabled={signingOut} className="flex w-full items-center gap-2 px-4 py-2.5 text-left text-sm hover:bg-surface-2">
+              <LogOut className="size-4 text-muted" aria-hidden /> {signingOut ? "Signing out…" : "Sign out"}
             </button>
           </form>
         </div>

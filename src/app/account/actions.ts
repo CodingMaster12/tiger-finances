@@ -1,10 +1,10 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
+import { weakPasswordMessage } from "@/lib/weak-password";
 import { verifyPassword } from "@/lib/supabase/verify-password";
 import {
   changePasswordSchema,
@@ -85,7 +85,7 @@ export async function changePassword(_prev: FormState, fd: FormData): Promise<Fo
     const { error } = await ctx.supabase.auth.updateUser({ password: parsed.data.password });
     if (error) {
       if (error.code === "same_password") return { fieldErrors: { password: "Choose a password you haven’t used before." } };
-      if (error.code === "weak_password") return { fieldErrors: { password: "That password is too weak or commonly used." } };
+      if (error.code === "weak_password") return { fieldErrors: { password: weakPasswordMessage(error) } };
       return { message: "We couldn’t update your password. Please try again." };
     }
   } catch {
@@ -114,5 +114,5 @@ export async function deleteAccount(_prev: FormState, fd: FormData): Promise<For
   } catch {
     return NETWORK;
   }
-  redirect("/login?deleted=1");
+  return { ok: true, redirectTo: "/login?deleted=1" };
 }

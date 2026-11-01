@@ -1,7 +1,7 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { siteUrl } from "@/lib/site-url";
+import { weakPasswordMessage } from "@/lib/weak-password";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import {
@@ -62,15 +62,14 @@ export async function register(_prev: FormState, fd: FormData): Promise<FormStat
       },
     });
     if (error) {
-      if (error.code === "weak_password") return { fieldErrors: { password: "That password is too weak or commonly used." } };
+      if (error.code === "weak_password") return { fieldErrors: { password: weakPasswordMessage(error) } };
       if (error.code === "over_email_send_rate_limit" || error.status === 429) {
         return { message: "Too many sign-up emails were requested. Please wait a few minutes and try again." };
       }
       return { message: "We couldn’t create your account. Please try again." };
     }
-    if (data.session) redirect("/account"); // Email confirmation is disabled on this project.
-  } catch (e) {
-    if (isRedirect(e)) throw e;
+    if (data.session) return { ok: true, redirectTo: "/account" }; // Email confirmation is off on this project.
+  } catch {
     return NETWORK;
   }
   // Identical response whether or not the email already exists, so accounts can't be enumerated.
@@ -95,15 +94,15 @@ export async function login(_prev: FormState, fd: FormData): Promise<FormState> 
   } catch {
     return NETWORK;
   }
-  redirect(next);
+  return { ok: true, redirectTo: next };
 }
 
-export async function logout() {
+/** Ends the session. The client then does a full page load so no signed-in UI state lingers. */
+export async function logout(): Promise<void> {
   if (isSupabaseConfigured()) {
     const supabase = await createClient();
     await supabase.auth.signOut();
   }
-  redirect("/login");
 }
 
 export async function requestPasswordReset(_prev: FormState, fd: FormData): Promise<FormState> {
@@ -133,15 +132,12 @@ export async function resetPassword(_prev: FormState, fd: FormData): Promise<For
     const { error } = await supabase.auth.updateUser({ password: parsed.data.password });
     if (error) {
       if (error.code === "same_password") return { fieldErrors: { password: "Choose a password you haven’t used before." } };
-      if (error.code === "weak_password") return { fieldErrors: { password: "That password is too weak or commonly used." } };
+      if (error.code === "weak_password") return { fieldErrors: { password: weakPasswordMessage(error) } };
       return { message: "We couldn’t update your password. Please try again." };
     }
   } catch {
     return NETWORK;
   }
-  redirect("/account?passwordReset=1");
+  return { ok: true, redirectTo: "/account?passwordReset=1" };
 }
 
-function isRedirect(e: unknown): boolean {
-  return typeof e === "object" && e !== null && "digest" in e && String((e as { digest: unknown }).digest).startsWith("NEXT_REDIRECT");
-}

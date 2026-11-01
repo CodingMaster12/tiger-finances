@@ -80,6 +80,8 @@ export type FormState = {
   ok?: boolean;
   message?: string;
   fieldErrors?: Record<string, string>;
+  /** Set on success: the client does a full page load here so no stale UI state survives. */
+  redirectTo?: string;
 };
 
 /** Flattens zod issues into one message per field (first issue wins). */

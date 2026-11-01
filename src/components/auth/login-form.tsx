@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState, useState } from "react";
 import { login } from "@/app/auth/actions";
+import { useHardRedirect } from "@/lib/use-hard-redirect";
 import { Button } from "@/components/ui/button";
 import { TextField } from "@/components/ui/text-field";
 import { PasswordField } from "./password-field";
@@ -11,6 +12,7 @@ import { FormMessage } from "./form-message";
 export function LoginForm({ next }: { next: string }) {
   const [state, action, pending] = useActionState(login, {});
   const [email, setEmail] = useState("");
+  useHardRedirect(state);
   return (
     <form action={action} className="space-y-4" noValidate>
       <input type="hidden" name="next" value={next} />
