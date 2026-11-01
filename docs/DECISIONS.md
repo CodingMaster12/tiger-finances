@@ -14,6 +14,7 @@
 | Name | "Tiger Finances" (placeholder "Meridian" was replaced) |
 | Scope order | Plan milestones 1–9 approved; ask before starting each |
 | Account deletion | In scope: requires password + typed DELETE; uses `SUPABASE_SECRET_KEY` server-side |
+| Canada data (2026-11-01) | **Option A**: full US data; Canadian companies get whatever the free tiers really return, clearly labelled. No unofficial sources, no paid plans. Free-plan facts so far are from vendor pages only (Twelve Data Basic: 800/day, 8/min, "internal non-display usage" wording to check against its terms; FMP Basic: 250/day, Canada reportedly paid). Real calls (AAPL, SHOP.TO, RY.TO) still to run once keys exist |
 | Registration copy | Terms/privacy are not written; the form says "once they are published". Do not invent legal terms |
 
 ## Milestone history

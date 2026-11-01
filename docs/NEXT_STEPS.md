@@ -3,8 +3,10 @@
 ## Done (code, committed)
 - Milestone 1: scaffold, design tokens, UI kit, tested finance calculations.
 - Milestone 2: accounts, profiles, unique usernames (change once per 14 days), settings, RLS.
-- Tests: `npm test` (48), `npm run test:db` (35 database assertions incl. cross-user isolation).
-- Not yet verified: live sign-up/login/reset against a real Supabase project.
+- Tests: `npm test` (58), `npm run test:db` (35 database assertions incl. cross-user isolation).
+- Live auth verified by the owner (register, confirm, login, reset, profile, password). Account deletion: not yet confirmed.
+- Milestone 3 in progress: decision = Option A (see DECISIONS.md). Blocked on `TWELVE_DATA_API_KEY` and `FMP_API_KEY` in the cloud environment, then a NEW session. First task: real calls for AAPL, SHOP.TO, RY.TO and an honest coverage report before building adapters. Also check Twelve Data's terms on displaying data publicly.
+- Fresh checkout: run `npx next typegen` before `npm run typecheck` (route types are generated).
 
 ## Owner checklist
 1. Supabase: follow `docs/SUPABASE_SETUP.md` (run `supabase/migrations/*.sql` in the SQL Editor,
