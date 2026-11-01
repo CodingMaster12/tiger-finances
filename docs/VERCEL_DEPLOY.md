@@ -43,6 +43,7 @@ Register with your Supabase account email (free email sender is limited) and con
 ## Troubleshooting
 | Problem | Fix |
 |---|---|
+| 404 NOT_FOUND even though the deployment says Ready | **Settings → Build and Deployment** shows a warning that the Production deployment's Framework is "Other" while the project says Next.js. The deployment was built before the framework was detected. `vercel.json` now pins `"framework": "nextjs"`; push a new commit (or Redeploy) so a fresh build uses it. |
 | 404 NOT_FOUND on the Vercel address | The imported repo doesn't contain the app, or no production deployment succeeded. Check **Settings → Git** and the **Deployments** build log. |
 | Asked to log in to Vercel | Deployment Protection is on: **Settings → Deployment Protection** *(may differ)*. |
 | "Not configured" banner | Variable missing or misspelled. Fix, then Redeploy. |
