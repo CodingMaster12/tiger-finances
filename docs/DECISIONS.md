@@ -6,7 +6,7 @@
 | Auth | Email + password only. Email verification ON. Password reset ON. **No social login and no fake social buttons.** |
 | Username | One unique username (case-insensitive), changeable **once every 14 days** (enforced by a DB trigger). First change is free |
 | Theme (2026-11-08) | **Dark only**, replacing "light only". Owner-supplied reference image: dark, amber-lit, thin wide-spaced type. Light theme dropped (revisit only if the owner asks) |
-| Look (2026-11-08) | **Gold with a hint of orange**, green as a thin lining for minor accents and text, on warm near-black. Replaces the PayPal-style navy/blue. Gains/losses use arrows and signs, never colour alone. One decorative home visual (glowing cube), nothing glowing in data views. Scope of first pass: design system + home page |
+| Look (2026-11-08) | Replaces the PayPal-style navy/blue. First pass was gold/orange with a green lining on warm black; the owner found it flat ("boring with just gold and black"). **Now: ink-violet ground with an animated gradient backdrop; gold anchor plus orange, pink, violet, cyan and emerald highlights; animated home scene; much less text on the home page; numbers moved to a separate `/numbers` page; header, footer, 404 and mobile nav connect every page.** Gains/losses use arrows and signs, never colour alone. Gradients are for backgrounds and fills only, never text |
 | Sync | Workspaces sync across devices through Supabase Postgres |
 | Data providers | Free only. **SEC EDGAR for fundamentals** (see rows below and `docs/SEC_EDGAR.md`). No free price source found that allows public display |
 | Hosting | Local first, then Vercel Hobby (free, non-commercial). Deployed at https://tiger-finances-six.vercel.app |

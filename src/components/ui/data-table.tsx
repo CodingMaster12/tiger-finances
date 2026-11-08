@@ -4,7 +4,7 @@ import { cn } from "./cn";
 
 /** Horizontally scrollable wrapper so wide statements never overflow the page. */
 export function TableWrap({ className, ...rest }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("overflow-x-auto", className)} tabIndex={0} role="region" {...rest} />;
+  return <div className={cn("relative overflow-x-auto", className)} tabIndex={0} role="region" {...rest} />;
 }
 
 export function Table({ className, ...rest }: HTMLAttributes<HTMLTableElement>) {

@@ -21,10 +21,12 @@ honest data handling, polished design. Product name: **Tiger Finances** (owner's
 - Be honest: say what was verified and what was not. Never claim untested things work. Mark dashboard labels
   you could not confirm as "(label may differ)". You cannot see their screen; ask for screenshots.
 - Ask before outward-facing or hard-to-reverse actions. Do not delete or overwrite without looking first.
-- **Theme (changed 2026-11-08):** the owner replaced the earlier "light, PayPal-style" direction. The site is now **dark only**, using a
-  reference image (dark, amber-lit, thin wide-spaced type). Palette: gold as main colour with a hint of orange (`--orange`), green as a thin
-  "lining" for minor accents and text (`--lining`). Gains/losses always use arrow + sign + colour. Display face Jost, body/numbers Inter.
-  One decorative glowing-cube visual on the home page only; data tables and charts stay crisp (no glow). `PRODUCT.md` holds the product
+- **Theme (changed twice on 2026-11-08):** the owner replaced the earlier "light, PayPal-style" direction. The site is **dark only**, ink-violet
+  ground with an animated gradient backdrop (`body::before`). Gold is the brand anchor; highlight tones are orange, pink, violet, cyan and
+  emerald (`--orange --pink --violet --cyan --lining`), gradients `.bg-hot/.bg-cool/.bg-fresh` are for fills only, never text. Flashy on
+  the home page (animated `HeroScene`, marquee, animated tile art), calm on data pages (Numbers, tables). Numbers live on `/numbers`, not the
+  home page. Gains/losses always use arrow + sign + colour. Display face Jost (semibold, uppercase), body/numbers Inter. All motion stops
+  under prefers-reduced-motion (verified). `PRODUCT.md` holds the product
   record and brand commitments; the Impeccable design skill is installed in `.claude/skills/impeccable` (run `/impeccable` for design work).
 - No social login and no fake buttons. Username is unique, changeable once per 14 days.
 
@@ -49,6 +51,9 @@ Commands: `npm run dev | build | lint | typecheck | test | test:db | sec:tickers
 - `src/lib/sec/*`: SEC EDGAR fundamentals (milestone 3). `facts.ts` period engine (dedupe, concept fallback per period, derived quarters),
   `statements.ts` assembler, `metrics.ts`, `search.ts` + `tickers.ts` + `data/company-tickers.json` (ticker snapshot), `client.ts` (throttled, `server-only`),
   `cache.ts`, `service.ts` (`financialsService.getCompanyFinancials(cik)`). Algorithms and sources: `docs/SEC_EDGAR.md`. Test fixtures are trimmed real SEC data.
+- `src/app/numbers` + `src/components/numbers` + `src/lib/sec/sample.ts`: the Numbers page, real statements from saved SEC filings (fixtures) for
+  Apple, Shopify, Royal Bank, built with the same engine as live data will use. `src/components/home/*`: home scene, marquee, tile art.
+  `src/components/layout/*`: header (`nav-links.tsx` marks the current page), footer, 404 at `src/app/not-found.tsx`.
 - `src/components/ui/*`: design-system kit. Tokens in `src/app/globals.css`. `/styleguide` shows them.
 - `supabase/migrations/*.sql`, `supabase/tests/*`: schema, RLS, tests. `docs/`: guides.
 

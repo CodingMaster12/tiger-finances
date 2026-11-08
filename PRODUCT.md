@@ -42,13 +42,13 @@ Every number is traceable (confirmed by the owner). Each figure carries its sour
 
 - Product name: **Tiger Finances** (owner's choice).
 - Visual direction is changing. The owner supplied a reference image of a dark, amber-lit, futuristic interface (an "Echo" concept) as the type of design they want. The earlier decisions of "PayPal-style, lighter colours, light theme only" are superseded by this. The rest of the visual world is undecided and belongs to the design phase, not this record.
-- **Colour palette (owner's binding instruction, 2026-11-08):** gold with a hint of orange as the main colour, with green as a thin "lining" used sparingly for minor accents and for text. Exact values, light/dark treatment and how gains and losses are shown are undecided.
+- **Colour and feel (owner's binding instructions, 2026-11-08):** dark; gold with a hint of orange as the anchor. After the first pass the owner said it looked flat and asked for more: flashy, gradient backgrounds, motion imagery, less text on the home page, a diversified set of highlight colours (now pink, violet, cyan and emerald alongside gold and orange), numbers kept on their own page, and all pages connected. Gains and losses use arrows and signs, never colour alone.
 
 ## Evidence on Hand
 
 - Real SEC data fixtures (trimmed) for Apple, Shopify and Royal Bank of Canada under `src/lib/sec/__fixtures__`, and 127 passing unit tests.
 - No testimonials, customers, usage numbers or press. Future work must not invent any.
-- The current UI is a design-system kit (`/styleguide`), a placeholder home page and working account pages, in a light, blue-and-grey theme.
+- The current UI: a short, animated home page, a Numbers page with real SEC statements for Apple, Shopify and Royal Bank, working account pages, a design-system page (`/styleguide`), a 404 page, and a site-wide header and footer.
 
 ## Product Principles
 

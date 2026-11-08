@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, LogOut, Settings } from "lucide-react";
+import { BarChart3, ChevronDown, LogOut, Settings } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { logout } from "@/app/auth/actions";
@@ -49,6 +49,9 @@ export function AccountMenu({ initials, name, email }: { initials: string; name:
             <p className="truncate text-sm font-semibold">{name}</p>
             <p className="truncate text-[13px] text-muted">{email}</p>
           </div>
+          <Link role="menuitem" href="/numbers" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-surface-2">
+            <BarChart3 className="size-4 text-muted" aria-hidden /> Numbers
+          </Link>
           <Link role="menuitem" href="/account" onClick={() => setOpen(false)} className="flex items-center gap-2 px-4 py-2.5 text-sm hover:bg-surface-2">
             <Settings className="size-4 text-muted" aria-hidden /> Account settings
           </Link>

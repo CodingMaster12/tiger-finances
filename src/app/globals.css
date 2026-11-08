@@ -1,64 +1,74 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Dark theme only (owner decision, 2026-11-08).
- * Palette: warm near-black ground, gold as the main colour with a hint of orange,
- * and green as a thin "lining" for minor accents and text. Direction taken from the owner's
- * reference image (dark, amber-lit, thin spaced type). Brand notes live in PRODUCT.md.
+ * Design tokens. Dark theme only (owner decision, 2026-11-08), then pushed brighter the same day:
+ * ink-violet ground with an animated gradient backdrop, gold as the anchor and pink, violet, cyan,
+ * orange and emerald as highlight tones. Brand notes live in PRODUCT.md.
  *
  * Gains and losses never rely on colour: components pair an arrow and a +/- sign with --positive / --negative.
  */
 :root {
   color-scheme: dark;
 
-  /* Ground and surfaces: warm blacks, lifted in small steps. */
-  --bg: #0b0a08;
-  --surface: #14120f;
-  --surface-2: #1d1a15;
-  --border: #2c2720;
-  --border-strong: #433b30;
+  /* Ground and surfaces: deep ink-violet, lifted in small steps. */
+  --bg: #08050f;
+  --surface: #130f26;
+  --surface-2: #1b1639;
+  --border: #2c2557;
+  --border-strong: #433a7d;
 
-  /* Text: warm ivory, never pure white. */
-  --text: #f4eee1;
-  --text-muted: #bdb2a0;
-  --text-subtle: #918775;
+  /* Text: soft white with a violet cast. */
+  --text: #f6f3ff;
+  --text-muted: #c4bcdf;
+  --text-subtle: #9d94c0;
 
-  /* Gold is the main colour; orange is the hint; green is the lining. */
-  --brand: #ecc15a;
-  --accent: #e9b43f;
-  --accent-hover: #f5c962;
-  --accent-soft: #2b2210;
-  --on-accent: #17110a;
-  --orange: #f08a3c;
-  --orange-soft: #33200f;
-  --lining: #7fd1a3;
-  --lining-soft: #10261b;
+  /* Gold stays the brand anchor. Highlight tones: orange, pink, violet, cyan, emerald. */
+  --brand: #ffc247;
+  --accent: #ffc247;
+  --accent-hover: #ffd36f;
+  --accent-soft: #33260f;
+  --on-accent: #1a1004;
+  --orange: #ff8a3d;
+  --orange-soft: #3a1e10;
+  --pink: #ff4f9a;
+  --pink-soft: #3a1030;
+  --violet: #a584ff;
+  --violet-soft: #1f1545;
+  --cyan: #2fd6ff;
+  --cyan-soft: #0d2a3a;
+  --lining: #3ee0a0;
+  --lining-soft: #0d2f27;
 
   /* Meaning colours (always shown with an icon, sign or label too). */
-  --positive: #62d393;
-  --positive-soft: #0f2a1d;
-  --negative: #ff8272;
-  --negative-soft: #3a1713;
-  --warning: #f2a23a;
-  --warning-soft: #33220b;
-  --info: #8fbfdc;
-  --info-soft: #13232d;
+  --positive: #4fe3a1;
+  --positive-soft: #0d2f26;
+  --negative: #ff6b7d;
+  --negative-soft: #3d1420;
+  --warning: #ffa53d;
+  --warning-soft: #3a2410;
+  --info: #2fd6ff;
+  --info-soft: #0d2a3a;
 
-  --focus: #f5c962;
+  --focus: #ffd36f;
 
-  /* Depth: real offsets and blur. The glow is reserved for the primary action and the home visual. */
+  /* Gradients for fills, backgrounds and highlights (never for text). */
+  --grad-hot: linear-gradient(100deg, #ffc247 0%, #ff8a3d 45%, #ff4f9a 100%);
+  --grad-cool: linear-gradient(100deg, #2fd6ff 0%, #9b6bff 55%, #ff4f9a 100%);
+  --grad-fresh: linear-gradient(100deg, #3ee0a0 0%, #2fd6ff 100%);
+
+  /* Depth: real offsets and blur. Glow is for primary actions and the home scene. */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
-  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.55);
-  --glow: 0 0 0 1px rgb(233 180 63 / 0.35), 0 6px 28px rgb(240 138 60 / 0.28);
-  --radius-sm: 4px;
-  --radius-md: 6px;
-  --radius-lg: 10px;
+  --shadow-md: 0 10px 30px rgb(0 0 0 / 0.55);
+  --glow: 0 0 0 1px rgb(255 194 71 / 0.4), 0 8px 30px rgb(255 79 154 / 0.3);
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
 
   /* Chart series: stable per-company colors, distinguishable without hue alone via markers. */
-  --series-1: #e9b43f;
-  --series-2: #5fc9a0;
-  --series-3: #b9a2f5;
-  --series-benchmark: #918775;
+  --series-1: #ffc247;
+  --series-2: #2fd6ff;
+  --series-3: #ff4f9a;
+  --series-benchmark: #9d94c0;
 }
 
 @theme inline {
@@ -77,6 +87,12 @@
   --color-on-accent: var(--on-accent);
   --color-orange: var(--orange);
   --color-orange-soft: var(--orange-soft);
+  --color-pink: var(--pink);
+  --color-pink-soft: var(--pink-soft);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --color-cyan: var(--cyan);
+  --color-cyan-soft: var(--cyan-soft);
   --color-lining: var(--lining);
   --color-lining-soft: var(--lining-soft);
   --color-positive: var(--positive);
@@ -106,6 +122,21 @@ body {
   line-height: 1.5;
 }
 
+/* Site-wide gradient backdrop: four colour pools that drift slowly behind everything. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: -20%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(40% 35% at 14% 10%, rgb(255 194 71 / 0.2), transparent 70%),
+    radial-gradient(38% 34% at 88% 8%, rgb(165 132 255 / 0.3), transparent 70%),
+    radial-gradient(42% 38% at 80% 80%, rgb(47 214 255 / 0.16), transparent 70%),
+    radial-gradient(40% 36% at 8% 86%, rgb(255 79 154 / 0.2), transparent 70%);
+  animation: bg-drift 30s ease-in-out infinite alternate;
+}
+
 /* Financial figures: tabular numerals so columns align. */
 .num {
   font-variant-numeric: tabular-nums;
@@ -119,7 +150,7 @@ body {
 
 /* Browser surfaces carry the palette too. */
 ::selection {
-  background: rgb(233 180 63 / 0.35);
+  background: rgb(255 79 154 / 0.45);
   color: var(--text);
 }
 input,
@@ -134,30 +165,58 @@ a {
   text-underline-offset: 3px;
 }
 
+/* Gradient fills (backgrounds only). */
+.bg-hot { background-image: var(--grad-hot); }
+.bg-cool { background-image: var(--grad-cool); }
+.bg-fresh { background-image: var(--grad-fresh); }
+
+/* ---- Motion ---- */
+@keyframes bg-drift {
+  to { transform: translate3d(3%, -2%, 0) scale(1.08) rotate(2deg); }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-14px); }
+}
+@keyframes breathe {
+  0%, 100% { transform: scaleY(0.82); }
+  50% { transform: scaleY(1.04); }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes dash-flow {
+  to { stroke-dashoffset: -60; }
+}
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes rise {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: var(--o, 0.7); }
+  100% { transform: translateY(-120px); opacity: 0; }
+}
+@keyframes blob {
+  0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+  50% { transform: translate3d(5%, -6%, 0) scale(1.15); }
+}
+@keyframes shimmer {
+  to { background-position: -200% 0; }
+}
+@keyframes twinkle {
+  0%, 100% { opacity: var(--o, 0.6); }
+  50% { opacity: calc(var(--o, 0.6) * 0.35); }
+}
+
+/* Reduced motion: everything holds still (one iteration, no loops). */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
   *::after {
     animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-}
-
-@keyframes shimmer {
-  to {
-    background-position: -200% 0;
-  }
-}
-
-/* Slow twinkle for the home visual's particles; switched off by the reduced-motion rule above. */
-@keyframes twinkle {
-  0%,
-  100% {
-    opacity: var(--o, 0.6);
-  }
-  50% {
-    opacity: calc(var(--o, 0.6) * 0.35);
   }
 }
 

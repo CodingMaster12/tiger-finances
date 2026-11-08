@@ -1,130 +1,146 @@
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { HeroVisual } from "@/components/home/hero-visual";
-import { Badge } from "@/components/ui/badge";
-import { formatCompact } from "@/lib/format";
+import type { ReactNode } from "react";
+import { CompareArt, OrbitArt, TraceArt, WorkspaceArt } from "@/components/home/bento-art";
+import { HeroScene } from "@/components/home/hero-scene";
+import { Marquee } from "@/components/home/marquee";
 
-// Real figures from Apple's SEC filings (the same data our tests use). Shown as a worked example of how
-// every number is traced; nothing on this page is live market data.
-const EXAMPLE = {
-  company: "Apple Inc.",
-  fullYear: { label: "Revenue, year ended 26 Sep 2026", value: 478_834_000_000, meta: "Form 10-K, filed 3 Nov 2026", accession: "0000320193-26-000026" },
-  quarter: { label: "Revenue, fourth quarter 2026", value: 114_477_000_000, meta: "Full year minus the first nine months" },
-};
-
-const coverage: { label: string; status: string; on: boolean }[] = [
-  { label: "US companies that file with the SEC", status: "Available", on: true },
-  { label: "Canadian companies that file with the SEC (kept in CAD)", status: "Available", on: true },
-  { label: "Canadian companies that do not file with the SEC", status: "Not covered", on: false },
-  { label: "Stock prices and valuation ratios", status: "Not available", on: false },
-];
-
-function PanelTitle({ children }: { children: string }) {
-  return <h2 className="font-display text-[12px] font-medium uppercase tracking-[0.2em] text-muted">{children}</h2>;
+interface Tile {
+  title: string;
+  line: string;
+  chip: string;
+  chipTone: string;
+  href: string;
+  cta: string;
+  art: ReactNode;
+  span: string;
+  surface: string;
 }
+
+const tiles: Tile[] = [
+  {
+    title: "Traced to the filing",
+    line: "Every figure shows its source, period and currency.",
+    chip: "Live",
+    chipTone: "bg-lining-soft text-lining",
+    href: "/numbers",
+    cta: "See real statements",
+    art: <TraceArt />,
+    span: "md:col-span-2",
+    surface: "from-violet-soft via-pink-soft to-surface",
+  },
+  {
+    title: "Side by side",
+    line: "Compare companies in one view.",
+    chip: "Coming soon",
+    chipTone: "bg-violet-soft text-violet",
+    href: "/numbers",
+    cta: "Start with the numbers",
+    art: <CompareArt />,
+    span: "",
+    surface: "from-cyan-soft via-violet-soft to-surface",
+  },
+  {
+    title: "Your workspace",
+    line: "Create an account, save your place, come back anywhere.",
+    chip: "Accounts live",
+    chipTone: "bg-accent-soft text-brand",
+    href: "/register",
+    cta: "Create account",
+    art: <WorkspaceArt />,
+    span: "",
+    surface: "from-accent-soft via-orange-soft to-surface",
+  },
+  {
+    title: "US and Canada",
+    line: "Companies that file with the SEC, on both sides of the border.",
+    chip: "Live",
+    chipTone: "bg-lining-soft text-lining",
+    href: "/numbers",
+    cta: "See Apple and Royal Bank",
+    art: <OrbitArt />,
+    span: "md:col-span-2",
+    surface: "from-lining-soft via-cyan-soft to-surface",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="-mt-2">
-      <section
-        aria-labelledby="home-title"
-        className="relative grid items-center gap-8 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-4"
-      >
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-x-0 -inset-y-6 -z-10"
-          style={{ background: "radial-gradient(55% 60% at 72% 42%, rgb(240 138 60 / 0.11), transparent 70%)" }}
-        />
-        <div className="py-6 lg:py-14">
+    <div className="space-y-16 lg:space-y-24">
+      <section aria-labelledby="home-title" className="grid items-center gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)]">
+        <div className="py-4 lg:py-10">
           <h1
             id="home-title"
-            className="font-display text-[clamp(2.1rem,5.2vw,4.5rem)] font-extralight uppercase leading-[1.1] tracking-[0.1em] text-text text-balance"
+            className="font-display text-[clamp(2.6rem,6.2vw,5.4rem)] font-semibold uppercase leading-[1.02] tracking-[0.02em] text-text"
           >
-            Trace every number <span className="block text-brand">to its filing</span>
+            Every number,
+            <span className="mt-3 block">
+              <span className="bg-hot inline-block -skew-x-6 rounded-md px-3 pb-1 pt-0.5 text-on-accent">traced.</span>
+            </span>
           </h1>
-          <p className="mt-6 max-w-[52ch] text-pretty text-base leading-relaxed text-muted">
-            Tiger Finances reads company financials straight from SEC filings. Every figure shows where it came from,
-            which period it covers and what currency it is in, and a gap says so plainly instead of being guessed.
-          </p>
-          <div className="mt-9 flex flex-wrap items-center gap-3">
+          <p className="mt-6 max-w-[34ch] text-balance text-lg text-muted">Company financials from SEC filings, with the receipts.</p>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <Link
+              href="/numbers"
+              className="bg-hot inline-flex h-12 items-center gap-2 rounded-md px-7 text-[15px] font-semibold text-on-accent shadow-glow transition-[filter,transform] hover:-translate-y-0.5 hover:brightness-110"
+            >
+              Explore the numbers <ArrowRight className="size-4" aria-hidden />
+            </Link>
             <Link
               href="/register"
-              className="inline-flex h-11 items-center rounded-md bg-accent px-6 text-sm font-semibold text-on-accent shadow-glow transition-colors hover:bg-accent-hover"
+              className="inline-flex h-12 items-center rounded-md border border-border-strong bg-surface/60 px-7 text-[15px] font-semibold text-text transition-colors hover:border-pink hover:text-pink"
             >
-              Create your workspace
-            </Link>
-            <Link
-              href="/login"
-              className="inline-flex h-11 items-center rounded-md border border-border-strong px-6 text-sm font-semibold text-text transition-colors hover:border-accent hover:text-brand"
-            >
-              Sign in
+              Create account
             </Link>
           </div>
-          <p className="mt-8 flex items-center gap-2.5 text-[13px] text-muted">
-            <span aria-hidden className="size-2 rounded-full bg-lining" />
-            Data source: SEC EDGAR. Stock prices are not available yet.
-          </p>
+          <ul className="mt-8 flex flex-wrap gap-2 text-xs font-semibold">
+            <li className="rounded-full bg-cyan-soft px-3 py-1 text-cyan">SEC filings</li>
+            <li className="rounded-full bg-pink-soft px-3 py-1 text-pink">US + Canada</li>
+            <li className="rounded-full bg-surface-2 px-3 py-1 text-muted">No prices yet</li>
+          </ul>
         </div>
-
-        <HeroVisual className="mx-auto w-full max-w-[640px] lg:max-w-none" />
+        <HeroScene className="mx-auto w-full max-w-[680px] lg:max-w-none" />
       </section>
 
-      <section aria-label="How the numbers work" className="mt-6 grid border-t border-border md:grid-cols-3 md:divide-x md:divide-border">
-        <div className="py-7 md:pr-8">
-          <PanelTitle>Source trail</PanelTitle>
-          <p className="mt-1 text-[13px] text-subtle">Example: {EXAMPLE.company}, from its SEC filings</p>
-          <dl className="mt-5 space-y-5">
-            <div>
-              <dt className="text-[13px] text-muted">{EXAMPLE.fullYear.label}</dt>
-              <dd className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="num font-display text-2xl font-light text-text">${formatCompact(EXAMPLE.fullYear.value, 2)}</span>
-                <Badge tone="lining">Reported</Badge>
-              </dd>
-              <dd className="mt-1 text-xs text-subtle">{EXAMPLE.fullYear.meta} · USD</dd>
-              <dd className="num mt-0.5 text-xs text-subtle">Filing {EXAMPLE.fullYear.accession}</dd>
-            </div>
-            <div>
-              <dt className="text-[13px] text-muted">{EXAMPLE.quarter.label}</dt>
-              <dd className="mt-1 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <span className="num font-display text-2xl font-light text-text">${formatCompact(EXAMPLE.quarter.value, 2)}</span>
-                <Badge tone="warning">Calculated</Badge>
-              </dd>
-              <dd className="mt-1 text-xs text-subtle">{EXAMPLE.quarter.meta}</dd>
-            </div>
-          </dl>
-        </div>
+      <div className="-mx-4 sm:-mx-6">
+        <Marquee />
+      </div>
 
-        <div className="border-t border-border py-7 md:border-t-0 md:px-8">
-          <PanelTitle>Data coverage</PanelTitle>
-          <ul className="mt-5 space-y-3.5">
-            {coverage.map((c) => (
-              <li key={c.label} className="flex items-start justify-between gap-4 text-[13px]">
-                <span className="flex items-start gap-2.5 text-text">
-                  <span aria-hidden className={`mt-1.5 size-2 shrink-0 rounded-full ${c.on ? "bg-accent" : "bg-border-strong"}`} />
-                  {c.label}
+      <section aria-labelledby="tiles-title">
+        <h2 id="tiles-title" className="sr-only">What you can do</h2>
+        <div className="grid gap-5 md:grid-cols-3">
+          {tiles.map((t) => (
+            <Link
+              key={t.title}
+              href={t.href}
+              className={`group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-gradient-to-br ${t.surface} ${t.span} transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-border-strong`}
+            >
+              <div className="h-56 px-4 pt-4">{t.art}</div>
+              <div className="flex flex-1 flex-col gap-3 p-6 pt-3">
+                <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${t.chipTone}`}>{t.chip}</span>
+                <h3 className="font-display text-2xl font-semibold uppercase tracking-[0.03em]">{t.title}</h3>
+                <p className="max-w-[40ch] text-sm text-muted">{t.line}</p>
+                <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-brand">
+                  {t.cta} <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
                 </span>
-                <span className={`shrink-0 ${c.on ? "text-brand" : "text-subtle"}`}>{c.status}</span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-5 text-xs text-subtle">Describes the data engine. Search and company pages arrive in the next milestones.</p>
+              </div>
+            </Link>
+          ))}
         </div>
+      </section>
 
-        <div className="border-t border-border py-7 md:border-t-0 md:pl-8">
-          <PanelTitle>How to read a number</PanelTitle>
-          <ul className="mt-5 space-y-4 text-[13px]">
-            <li className="flex items-start gap-3">
-              <Badge tone="lining">Reported</Badge>
-              <span className="text-muted">Taken directly from a filing.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <Badge tone="warning">Calculated</Badge>
-              <span className="text-muted">Worked out by us, with the method shown.</span>
-            </li>
-            <li className="flex items-start gap-3">
-              <span className="num inline-flex w-[5.5rem] shrink-0 justify-center rounded-full bg-surface-2 py-0.5 text-xs font-semibold text-muted">—</span>
-              <span className="text-muted">Not available. Never guessed or filled in.</span>
-            </li>
-          </ul>
+      <section aria-labelledby="cta-title" className="bg-hot relative overflow-hidden rounded-3xl px-6 py-14 text-center text-on-accent sm:px-12">
+        <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 size-64 rounded-full bg-[#fff3b8]/40 blur-3xl" style={{ animation: "blob 12s ease-in-out infinite" }} />
+        <div aria-hidden className="pointer-events-none absolute -bottom-20 -right-10 size-72 rounded-full bg-[#7a3df0]/45 blur-3xl" style={{ animation: "blob 15s ease-in-out -5s infinite" }} />
+        <h2 id="cta-title" className="relative font-display text-4xl font-semibold uppercase tracking-[0.04em] sm:text-5xl">Start tracing.</h2>
+        <p className="relative mx-auto mt-3 max-w-[36ch] text-base font-medium">A free account keeps your place across devices.</p>
+        <div className="relative mt-8 flex flex-wrap justify-center gap-3">
+          <Link href="/register" className="inline-flex h-12 items-center rounded-md bg-bg px-7 text-[15px] font-semibold text-text shadow-md transition-transform hover:-translate-y-0.5">
+            Create account
+          </Link>
+          <Link href="/numbers" className="inline-flex h-12 items-center rounded-md border-2 border-on-accent/70 px-7 text-[15px] font-semibold transition-colors hover:bg-on-accent/10">
+            See the numbers
+          </Link>
         </div>
       </section>
     </div>
