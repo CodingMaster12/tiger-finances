@@ -17,8 +17,9 @@ export default function Home() {
           {[
             ["Design system and UI kit", "Ready", "positive"],
             ["Financial calculations and formatting", "Ready, unit-tested", "positive"],
-            ["Accounts and saved workspace", "Milestone 2", "neutral"],
-            ["Company search and research pages", "Milestones 3–5", "neutral"],
+            ["Accounts (sign-up, sign-in, settings)", "Ready", "positive"],
+            ["SEC financial data engine (not shown on pages yet)", "Ready, unit-tested", "positive"],
+            ["Company search and research pages", "Milestones 4–5", "neutral"],
             ["Comparison", "Milestone 6", "neutral"],
           ].map(([name, status, tone]) => (
             <li key={name} className="flex items-center justify-between px-5 py-3">

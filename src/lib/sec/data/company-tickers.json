@@ -1,0 +1,10 @@
+{
+  "generatedAt": "2026-11-08T00:00:00Z",
+  "source": "Starter file: three companies checked by hand against SEC data. Run `npm run sec:tickers` to replace it with the full SEC list.",
+  "complete": false,
+  "entries": [
+    [320193, "Apple Inc.", "AAPL", "Nasdaq"],
+    [1594805, "SHOPIFY INC.", "SHOP", "Nasdaq"],
+    [1000275, "ROYAL BANK OF CANADA", "RY", "NYSE"]
+  ]
+}

@@ -1,0 +1,17 @@
+{
+ "cik": "0001000275",
+ "name": "ROYAL BANK OF CANADA",
+ "tickers": [
+  "RY",
+  "RYLBF"
+ ],
+ "exchanges": [
+  "NYSE",
+  "OTC"
+ ],
+ "sic": "6029",
+ "sicDescription": "Commercial Banks, NEC",
+ "fiscalYearEnd": "1031",
+ "stateOfIncorporation": "A6",
+ "category": ""
+}

@@ -10,7 +10,8 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:db": "bash scripts/test-db.sh"
+    "test:db": "bash scripts/test-db.sh",
+    "sec:tickers": "node scripts/update-sec-tickers.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

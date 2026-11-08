@@ -30,8 +30,8 @@ honest data handling, polished design. Product name: **Tiger Finances** (owner's
 Next.js 16 (App Router, `cacheComponents` on), React 19, strict TypeScript, Tailwind 4, Zod 4, Recharts (installed, unused yet),
 Supabase (Auth + Postgres + RLS) via `@supabase/ssr`, Vitest, Playwright (installed; no e2e tests written yet), Vercel (Hobby).
 
-Commands: `npm run dev | build | lint | typecheck | test | test:db`
-- `npm test`: unit tests (currently 58). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
+Commands: `npm run dev | build | lint | typecheck | test | test:db | sec:tickers`
+- `npm test`: unit tests (currently 127). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
   35 RLS and ownership assertions (no Docker needed; needs PG server binaries, which the cloud container has).
 - Before every commit: lint, typecheck, test, build all clean; run `test:db` when SQL changes.
 
@@ -44,6 +44,9 @@ Commands: `npm run dev | build | lint | typecheck | test | test:db`
 - `src/lib/validation/auth.ts`: Zod schemas, password rules (10+ chars, a letter, a number, max 72 bytes), `safeNextPath`.
 - `src/lib/finance/calculations.ts`: pure financial formulas returning `null` for undefined results (never NaN).
 - `src/lib/format.ts`: display formatting; missing values render as "—".
+- `src/lib/sec/*`: SEC EDGAR fundamentals (milestone 3). `facts.ts` period engine (dedupe, concept fallback per period, derived quarters),
+  `statements.ts` assembler, `metrics.ts`, `search.ts` + `tickers.ts` + `data/company-tickers.json` (ticker snapshot), `client.ts` (throttled, `server-only`),
+  `cache.ts`, `service.ts` (`financialsService.getCompanyFinancials(cik)`). Algorithms and sources: `docs/SEC_EDGAR.md`. Test fixtures are trimmed real SEC data.
 - `src/components/ui/*`: design-system kit. Tokens in `src/app/globals.css`. `/styleguide` shows them.
 - `supabase/migrations/*.sql`, `supabase/tests/*`: schema, RLS, tests. `docs/`: guides.
 
@@ -66,6 +69,9 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - `vercel.json` pins `"framework": "nextjs"`. A deployment built with framework "Other" served a 404 on every route.
 - Email links use PKCE: they must be opened **in the same browser** that requested them. Supabase's free built-in email sender is
   rate-limited and may only deliver to the owner's own team address; custom SMTP is needed before real users.
+- **Data licensing:** free tiers of Twelve Data, FMP, Alpha Vantage, Finnhub, Massive/Polygon, EODHD and Yahoo all forbid showing their data on a public multi-user site. Do not add them. SEC EDGAR is the approved source. Re-read terms before adding any provider.
+- **SEC rules:** max 10 req/s total, declared User-Agent with contact (`SEC_USER_AGENT`, required in production), cache hard. The SEC throttles shared cloud IPs (HTTP 403 "Request Rate Threshold Exceeded", lifts after ~10 min); the cloud container hit this repeatedly. Never loop on 403. Only `data.sec.gov` is fetched live; the ticker list is a committed snapshot.
+- EDGAR facts: `fy`/`fp` describe the filing, not the period; use start/end dates. Per-share values are never derived by subtraction. Never convert currencies in the SEC layer.
 - Never run `pkill -f` / `pgrep -f` with a pattern that appears in your own command line: it kills your shell. Kill by port
   (`fuser -k 3100/tcp`). A stale `next start` on a port serves an old build.
 - A scaffold quirk: README edits via string-replace silently no-op'd once. Verify edits actually applied.
@@ -90,18 +96,13 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - **Done and verified live by the owner:** register, email confirmation, sign-in, session survives refresh, profile and
   username (14-day rule), preferences, password change, sign-out/in, password reset, header account menu.
 - **Not confirmed:** account deletion (needs `SUPABASE_SECRET_KEY`; owner was told to test it last).
-- **Not built:** everything in milestones 3–9 below. No data providers, search, company pages, charts, comparison, watchlists, notes.
+- **Built, not shown on pages yet:** SEC data layer (milestone 3, 127 tests incl. real-data fixtures for Apple, Shopify, Royal Bank). Live end-to-end check against the SEC could not be completed because the container IP was throttled (see gotchas); status in docs/NEXT_STEPS.md.
+- **Not built:** milestones 4–9: search UI, company pages, charts, comparison, watchlists, notes. **No prices** (owner decision): no price chart, market cap or valuation ratios.
 - Known gaps: no e2e (Playwright) tests; no terms/privacy pages (the register form says "once they are published"); no custom SMTP.
 
 ## Roadmap (owner approved the plan; ask before each milestone starts)
-3. **Data providers.** Free tiers only. Research claims (UNVERIFIED, from blog posts): Twelve Data ~800 calls/day (prices; TSX
-   coverage on free plan unconfirmed), Financial Modeling Prep ~250/day (fundamentals mostly US on free), Alpha Vantage 25/day,
-   Finnhub (US-focused), EODHD ~20/day. **Canadian fundamentals on a free tier are doubtful.** First step: confirm current docs, have the
-   owner create free keys (write exact signup steps, keys go in env settings only), then test real calls (AAPL, SHOP.TO, RY.TO) and
-   report coverage honestly before building. If Canada is weak, bring the owner options (US-complete + Canadian prices/profiles,
-   an unofficial source with ToS risk, or a paid tier needing approval). Never fabricate data. Adapters return Zod-validated, normalized
-   types with source, currency, period, retrieval timestamp; server-side cache, dedupe, rate-limit handling.
-4. Global search + company overview page. 5. Statements (annual first) + trend charts + price chart.
+3. **Data layer: DONE (code).** SEC EDGAR fundamentals only; prices deferred (owner choice a). See `docs/SEC_EDGAR.md` and DECISIONS.md. Open: owner picks the `SEC_USER_AGENT` contact; run `npm run sec:tickers` on the owner's computer.
+4. Global search + company overview page (no price/valuation yet). 5. Statements (annual + quarterly) + trend charts (revenue, earnings, margins, FCF; no price chart).
 6. Comparison (2–3 companies, normalize returns, handle currency/period mismatches, saved comparisons).
 7. Watchlists, notes, recently viewed, preferences. 8. Visual QA (browser), accessibility, e2e tests. 9. Docs and delivery.
 Use `Skill` guidance for charts/design if available. Inspect real layouts in Chromium (Playwright is installed) at desktop and mobile.
