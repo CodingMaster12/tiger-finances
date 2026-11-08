@@ -1,0 +1,316 @@
+{
+ "schemaVersion": 2,
+ "generatedAt": "2026-11-08T02:12:54Z",
+ "title": "Design System: Tiger Finances",
+ "extensions": {
+  "colorMeta": {
+   "gold": {
+    "role": "primary",
+    "displayName": "Lantern Gold",
+    "canonical": "#ffc247",
+    "tonalRamp": [
+     "#3d2e0f",
+     "#765411",
+     "#b87e09",
+     "#fba800",
+     "#ffbd37",
+     "#ffd071",
+     "#fae2b0",
+     "#f9f4ec"
+    ]
+   },
+   "orange": {
+    "role": "secondary",
+    "displayName": "Ember Orange",
+    "canonical": "#ff8a3d",
+    "tonalRamp": [
+     "#3d220f",
+     "#763911",
+     "#b84f09",
+     "#fb6400",
+     "#ff8637",
+     "#ffa971",
+     "#facdb0",
+     "#f9f1ec"
+    ]
+   },
+   "violet": {
+    "role": "secondary",
+    "displayName": "Dusk Violet",
+    "canonical": "#a584ff",
+    "tonalRamp": [
+     "#1c0f3d",
+     "#2c1176",
+     "#3809b8",
+     "#4300fb",
+     "#6c37ff",
+     "#9771ff",
+     "#c4b0fa",
+     "#efecf9"
+    ]
+   },
+   "cyan": {
+    "role": "secondary",
+    "displayName": "Signal Cyan",
+    "canonical": "#2fd6ff",
+    "tonalRamp": [
+     "#0f343d",
+     "#116276",
+     "#0995b8",
+     "#00cafb",
+     "#37d8ff",
+     "#71e3ff",
+     "#b0ebfa",
+     "#ecf6f9"
+    ]
+   },
+   "emerald": {
+    "role": "secondary",
+    "displayName": "Ledger Emerald",
+    "canonical": "#3ee0a0",
+    "tonalRamp": [
+     "#16372a",
+     "#1f684b",
+     "#21a06e",
+     "#23d991",
+     "#52e3aa",
+     "#85ebc3",
+     "#baf0db",
+     "#eef7f3"
+    ]
+   },
+   "pink": {
+    "role": "tertiary",
+    "displayName": "Hot Pink",
+    "canonical": "#ff4f9a",
+    "tonalRamp": [
+     "#3d0f23",
+     "#76113c",
+     "#b80954",
+     "#fb006b",
+     "#ff378c",
+     "#ff71ad",
+     "#fab0d0",
+     "#f9ecf1"
+    ]
+   },
+   "ink": {
+    "role": "neutral",
+    "displayName": "Ink",
+    "canonical": "#08050f",
+    "tonalRamp": [
+     "#221b32",
+     "#392a5d",
+     "#4f358c",
+     "#653fbd",
+     "#8769cd",
+     "#aa94db",
+     "#cec3e8",
+     "#f1eff5"
+    ]
+   },
+   "surface": {
+    "role": "neutral",
+    "displayName": "Night Surface",
+    "canonical": "#130f26",
+    "tonalRamp": [
+     "#201c30",
+     "#352d59",
+     "#483b86",
+     "#5a47b4",
+     "#7e6fc6",
+     "#a499d7",
+     "#cbc5e5",
+     "#f0eff5"
+    ]
+   },
+   "surface-raised": {
+    "role": "neutral",
+    "displayName": "Raised Surface",
+    "canonical": "#1b1639",
+    "tonalRamp": [
+     "#1f1c30",
+     "#332d5a",
+     "#453a87",
+     "#5646b5",
+     "#7b6ec7",
+     "#a198d7",
+     "#c9c5e5",
+     "#f0eff5"
+    ]
+   },
+   "text": {
+    "role": "neutral",
+    "displayName": "Moon Text",
+    "canonical": "#f6f3ff",
+    "tonalRamp": [
+     "#1b0f3d",
+     "#2a1176",
+     "#3509b8",
+     "#3f00fb",
+     "#6937ff",
+     "#9471ff",
+     "#c3b0fa",
+     "#efecf9"
+    ]
+   }
+  },
+  "typographyMeta": {
+   "display": {
+    "displayName": "Display",
+    "purpose": "The home headline only. Uppercase Jost semibold."
+   },
+   "headline": {
+    "displayName": "Headline",
+    "purpose": "Page titles, normal case."
+   },
+   "title": {
+    "displayName": "Title",
+    "purpose": "Tile and banner titles."
+   },
+   "body": {
+    "displayName": "Body",
+    "purpose": "Inter 14px for everything else; tabular figures for numbers."
+   },
+   "label": {
+    "displayName": "Label",
+    "purpose": "Navigation, panel titles, table headers. Never a kicker above a heading."
+   }
+  },
+  "shadows": [
+   {
+    "name": "small",
+    "value": "0 1px 2px rgb(0 0 0 / 0.5)",
+    "purpose": "Resting cards."
+   },
+   {
+    "name": "medium",
+    "value": "0 10px 30px rgb(0 0 0 / 0.55)",
+    "purpose": "Menus and dialogs."
+   },
+   {
+    "name": "glow",
+    "value": "0 0 0 1px rgb(255 194 71 / 0.22), 0 4px 14px rgb(255 138 61 / 0.14)",
+    "purpose": "Primary buttons only."
+   }
+  ],
+  "motion": [
+   {
+    "name": "ease-soft",
+    "value": "cubic-bezier(0.22, 1, 0.36, 1)",
+    "purpose": "Hover lifts and state changes (0.2-0.3s)."
+   },
+   {
+    "name": "drift",
+    "value": "50s ease-in-out infinite alternate",
+    "purpose": "Backdrop colour pools. Home scene loops run 10-28s. All stop under prefers-reduced-motion."
+   }
+  ],
+  "breakpoints": [
+   {
+    "name": "sm",
+    "value": "640px"
+   },
+   {
+    "name": "md",
+    "value": "768px"
+   },
+   {
+    "name": "lg",
+    "value": "1024px"
+   }
+  ]
+ },
+ "components": [
+  {
+   "name": "Primary Button",
+   "kind": "button",
+   "refersTo": "button-primary",
+   "description": "The one main action on a screen.",
+   "html": "<button class=\"ds-btn ds-btn-primary\">Explore the numbers</button>",
+   "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 24px;border-radius:10px;font:600 15px Inter,system-ui,sans-serif;cursor:pointer;transition:filter .2s,transform .2s,border-color .2s,color .2s}.ds-btn-primary{border:0;color:#1a1004;background-image:linear-gradient(100deg,#ffc247,#ff9f3d);box-shadow:0 0 0 1px rgba(255,194,71,.22),0 4px 14px rgba(255,138,61,.14)}.ds-btn-primary:hover{filter:brightness(1.1);transform:translateY(-2px)}.ds-btn-primary:focus-visible{outline:2px solid #ffd36f;outline-offset:2px}"
+  },
+  {
+   "name": "Secondary Button",
+   "kind": "button",
+   "refersTo": "button-secondary",
+   "description": "Supporting action beside a primary.",
+   "html": "<button class=\"ds-btn ds-btn-secondary\">Create account</button>",
+   "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;height:44px;padding:0 24px;border-radius:10px;font:600 15px Inter,system-ui,sans-serif;cursor:pointer;transition:filter .2s,transform .2s,border-color .2s,color .2s}.ds-btn-secondary{background:#130f26;color:#f6f3ff;border:1px solid #433a7d}.ds-btn-secondary:hover{border-color:#ffc247;color:#ffc247}.ds-btn-secondary:focus-visible{outline:2px solid #ffd36f;outline-offset:2px}"
+  },
+  {
+   "name": "Text Field",
+   "kind": "input",
+   "refersTo": "input",
+   "description": "Form input with label.",
+   "html": "<label class=\"ds-field\"><span>Email</span><input placeholder=\"you@example.com\"></label>",
+   "css": ".ds-field{display:block;font:500 13px Inter,system-ui,sans-serif;color:#f6f3ff}.ds-field input{display:block;margin-top:6px;width:100%;height:40px;padding:0 12px;border-radius:10px;border:1px solid #2c2557;background:#130f26;color:#f6f3ff;font:14px Inter,system-ui,sans-serif}.ds-field input::placeholder{color:#9d94c0}.ds-field input:hover{border-color:#433a7d}.ds-field input:focus{outline:none;border-color:#ffc247;box-shadow:0 0 0 3px rgba(255,194,71,.25)}"
+  },
+  {
+   "name": "Navigation Link",
+   "kind": "nav",
+   "description": "Header navigation with the current page marked.",
+   "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-a ds-on\" href=\"#\">Home</a><a class=\"ds-nav-a\" href=\"#\">Numbers</a></nav>",
+   "css": ".ds-nav{display:flex;gap:4px}.ds-nav-a{position:relative;padding:6px 12px;border-radius:10px;font:500 13px Jost,Inter,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#c4bcdf;text-decoration:none}.ds-nav-a:hover{color:#ffc247}.ds-on{color:#f6f3ff}.ds-on:after{content:'';position:absolute;left:12px;right:12px;bottom:-2px;height:2px;border-radius:2px;background:linear-gradient(100deg,#ffc247,#ff9f3d)}"
+  },
+  {
+   "name": "Status Chip",
+   "kind": "chip",
+   "description": "Small pill for state: live, coming soon, info.",
+   "html": "<span class=\"ds-chip ds-live\">Live</span> <span class=\"ds-chip ds-soon\">Coming soon</span>",
+   "css": ".ds-chip{display:inline-block;padding:4px 12px;border-radius:999px;font:600 12px Inter,system-ui,sans-serif}.ds-live{background:#0d2f27;color:#3ee0a0}.ds-soon{background:#1f1545;color:#a584ff}"
+  },
+  {
+   "name": "Feature Tile",
+   "kind": "card",
+   "refersTo": "tile",
+   "description": "Home tile: tinted surface, illustration area, title, one line, link.",
+   "html": "<div class=\"ds-tile\"><div class=\"ds-art\"></div><span class=\"ds-chip ds-live\">Live</span><h3>Traced to the filing</h3><p>Every figure shows its source, period and currency.</p><a href=\"#\">See real statements &rarr;</a></div>",
+   "css": ".ds-tile{max-width:340px;padding:24px;border-radius:12px;border:1px solid #2c2557;background:linear-gradient(135deg,rgba(31,21,69,.4),#130f26);color:#f6f3ff;font:14px Inter,system-ui,sans-serif;transition:transform .3s,border-color .3s}.ds-tile:hover{transform:translateY(-4px);border-color:#433a7d}.ds-art{height:90px;margin-bottom:12px;border-radius:8px;background:radial-gradient(60% 80% at 50% 50%,rgba(255,194,71,.18),transparent)}.ds-chip{display:inline-block;padding:4px 12px;border-radius:999px;font:600 12px Inter,sans-serif;background:#0d2f27;color:#3ee0a0}.ds-tile h3{margin:12px 0 4px;font:600 24px Jost,Inter,sans-serif;letter-spacing:.01em}.ds-tile p{margin:0 0 12px;color:#c4bcdf}.ds-tile a{color:#ffc247;font-weight:600;text-decoration:none}"
+  }
+ ],
+ "narrative": {
+  "northStar": "The Illuminated Ledger",
+  "overview": "Financial records, lit from within. A dark ink-violet ground carries gold as the light source with quiet violet, cyan and emerald accents. Precise and trustworthy first, eye-catching second: the home page gets motion and atmosphere, data pages stay calm and dense. Dial setting 0.6 on the owner's scale (0 = first gold-on-black pass, 1 = full bright pass).",
+  "keyCharacteristics": [
+   "Dark only",
+   "Gold-led with colour as accents",
+   "Motion on the home page only, soft and slow, fully stopped for reduced motion",
+   "Data pages calm: no glow, no gradients behind numbers"
+  ],
+  "rules": [
+   {
+    "name": "The Gold Is Light Rule",
+    "body": "Gold marks what is active or primary. If everything is gold, nothing is.",
+    "section": "colors"
+   },
+   {
+    "name": "The Never-In-Text Rule",
+    "body": "Gradients fill backgrounds, buttons and banners; never text.",
+    "section": "colors"
+   },
+   {
+    "name": "The One Glow Rule",
+    "body": "Glow belongs to the primary action and the home scene only.",
+    "section": "elevation"
+   },
+   {
+    "name": "The No-Kicker Rule",
+    "body": "No small label above a heading.",
+    "section": "typography"
+   }
+  ],
+  "dos": [
+   "Do keep the product at the 0.6 setting",
+   "Do pair every up/down or status colour with an arrow, sign or word",
+   "Do keep numbers on data pages, with their source",
+   "Do stop all motion under prefers-reduced-motion"
+  ],
+  "donts": [
+   "Don't use gradient text, decorative blur or coloured card side-borders",
+   "Don't add pink gradients or neon glows (the rejected 1.0 pass)",
+   "Don't put numbers or chart-like graphics on the home page",
+   "Don't add a light theme without being asked"
+  ]
+ }
+}

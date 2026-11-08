@@ -60,9 +60,9 @@ function rng(seed: number) {
 const SPARK_COLORS = ["#ffd36f", "#2fd6ff", "#a584ff", "#f6f3ff"];
 const sparks = (() => {
   const r = rng(20261108);
-  return Array.from({ length: 24 }, (_, i) => {
+  return Array.from({ length: 14 }, (_, i) => {
     const [cx, cy] = iso(-2 + r() * 12.5, -1 + r() * 11, r() * 5);
-    return { cx, cy, r: 0.8 + r() * 1.8, o: 0.4 + r() * 0.4, c: SPARK_COLORS[i % SPARK_COLORS.length], dur: 5 + r() * 7, delay: -r() * 10 };
+    return { cx, cy, r: 0.8 + r() * 1.8, o: 0.3 + r() * 0.35, c: SPARK_COLORS[i % SPARK_COLORS.length], dur: 5 + r() * 7, delay: -r() * 10 };
   });
 })();
 const gridLines = (() => {
@@ -80,13 +80,13 @@ function Pillar({ box, index }: { box: Box; index: number }) {
   const style: CSSProperties = {
     transformBox: "fill-box",
     transformOrigin: "50% 100%",
-    animation: `breathe ${8 + (index % 4)}s ease-in-out ${-index * 0.9}s infinite`,
+    animation: `breathe ${10 + (index % 4)}s ease-in-out ${-index * 0.9}s infinite`,
   };
   return (
-    <g style={style} stroke={c1} strokeOpacity="0.85" strokeWidth="1" strokeLinejoin="round">
+    <g style={style} stroke={c1} strokeOpacity="0.7" strokeWidth="1" strokeLinejoin="round">
       <polygon points={f.left} fill={`url(#pl-${box.hue})`} />
       <polygon points={f.right} fill={`url(#pr-${box.hue})`} />
-      <polygon points={f.top} fill={c1} fillOpacity="0.85" />
+      <polygon points={f.top} fill={c1} fillOpacity="0.7" />
     </g>
   );
 }
@@ -96,7 +96,7 @@ function Ring({ rx, tilt, color, dur, reverse }: { rx: number; tilt: number; col
   return (
     <g transform={`translate(${cx.toFixed(1)} ${cy.toFixed(1)}) rotate(${tilt}) scale(1 0.34)`}>
       <g style={{ animation: `spin ${dur}s linear infinite ${reverse ? "reverse" : ""}` }}>
-        <circle r={rx} fill="none" stroke={color} strokeOpacity="0.55" strokeWidth="1.4" strokeDasharray="3 9" />
+        <circle r={rx} fill="none" stroke={color} strokeOpacity="0.4" strokeWidth="1.2" strokeDasharray="3 9" />
         <circle cx={rx} r="7" fill={color} />
         <circle cx={rx} r="16" fill={color} fillOpacity="0.25" />
       </g>
@@ -128,19 +128,19 @@ export function HeroScene({ className }: { className?: string }) {
     <div ref={root} onPointerMove={onMove} onPointerLeave={onLeave} className={`relative isolate ${className ?? ""}`} aria-hidden="true">
       {/* Colour blobs. */}
       <div style={layer(-10, -7)} className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-[8%] top-[10%] size-[46%] rounded-full bg-[#ffc247]/24 blur-3xl" style={{ animation: "blob 13s ease-in-out infinite" }} />
-        <div className="absolute right-[4%] top-[4%] size-[44%] rounded-full bg-[#a584ff]/30 blur-3xl" style={{ animation: "blob 16s ease-in-out -4s infinite" }} />
-        <div className="absolute bottom-[6%] left-[16%] size-[42%] rounded-full bg-[#ff8a3d]/20 blur-3xl" style={{ animation: "blob 18s ease-in-out -8s infinite" }} />
-        <div className="absolute bottom-[10%] right-[10%] size-[40%] rounded-full bg-[#2fd6ff]/22 blur-3xl" style={{ animation: "blob 15s ease-in-out -2s infinite" }} />
+        <div className="absolute left-[8%] top-[10%] size-[46%] rounded-full bg-[#ffc247]/16 blur-3xl" style={{ animation: "blob 13s ease-in-out infinite" }} />
+        <div className="absolute right-[4%] top-[4%] size-[44%] rounded-full bg-[#a584ff]/20 blur-3xl" style={{ animation: "blob 16s ease-in-out -4s infinite" }} />
+        <div className="absolute bottom-[6%] left-[16%] size-[42%] rounded-full bg-[#ff8a3d]/12 blur-3xl" style={{ animation: "blob 18s ease-in-out -8s infinite" }} />
+        <div className="absolute bottom-[10%] right-[10%] size-[40%] rounded-full bg-[#2fd6ff]/14 blur-3xl" style={{ animation: "blob 15s ease-in-out -2s infinite" }} />
       </div>
 
-      <div style={layer(8, 5)}>
+      <div style={layer(6, 4)}>
         <svg viewBox="0 0 660 560" className="block h-auto w-full" focusable="false" role="presentation">
           <defs>
             {Object.entries(HUES).map(([name, [a, b]]) => (
               <g key={name}>
                 <linearGradient id={`pl-${name}`} x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stopColor={a} stopOpacity="0.62" />
+                  <stop offset="0" stopColor={a} stopOpacity="0.5" />
                   <stop offset="1" stopColor={b} stopOpacity="0.08" />
                 </linearGradient>
                 <linearGradient id={`pr-${name}`} x1="0" y1="0" x2="0" y2="1">
@@ -150,7 +150,7 @@ export function HeroScene({ className }: { className?: string }) {
               </g>
             ))}
             <radialGradient id="floor-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0" stopColor="#ff8a3d" stopOpacity="0.5" />
+              <stop offset="0" stopColor="#ff8a3d" stopOpacity="0.38" />
               <stop offset="0.5" stopColor="#ffc247" stopOpacity="0.2" />
               <stop offset="1" stopColor="#ffc247" stopOpacity="0" />
             </radialGradient>
@@ -183,8 +183,8 @@ export function HeroScene({ className }: { className?: string }) {
           {behind.map((b, i) => <Pillar key={`b${i}`} box={b} index={i} />)}
 
           <Ring rx={190} tilt={-14} color="#2fd6ff" dur={28} />
-          <g style={{ animation: "float 8s ease-in-out infinite" }}>
-            <polygon points={c.top} fill="#ff8a3d" opacity="0.5" filter="url(#soft)" />
+          <g style={{ animation: "float 10s ease-in-out infinite" }}>
+            <polygon points={c.top} fill="#ff8a3d" opacity="0.38" filter="url(#soft)" />
             <polygon points={c.left} fill="url(#cube-left)" />
             <polygon points={c.right} fill="url(#cube-right)" />
             <polygon points={c.top} fill="url(#cube-top)" />

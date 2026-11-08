@@ -27,7 +27,7 @@ const tiles: Tile[] = [
     cta: "See real statements",
     art: <TraceArt />,
     span: "md:col-span-2",
-    surface: "from-violet-soft/60 to-surface",
+    surface: "from-violet-soft/40 to-surface",
   },
   {
     title: "Side by side",
@@ -38,7 +38,7 @@ const tiles: Tile[] = [
     cta: "Start with the numbers",
     art: <CompareArt />,
     span: "",
-    surface: "from-cyan-soft/60 to-surface",
+    surface: "from-cyan-soft/40 to-surface",
   },
   {
     title: "Your workspace",
@@ -49,7 +49,7 @@ const tiles: Tile[] = [
     cta: "Create account",
     art: <WorkspaceArt />,
     span: "",
-    surface: "from-accent-soft/70 to-surface",
+    surface: "from-accent-soft/45 to-surface",
   },
   {
     title: "US and Canada",
@@ -60,7 +60,7 @@ const tiles: Tile[] = [
     cta: "See Apple and Royal Bank",
     art: <OrbitArt />,
     span: "md:col-span-2",
-    surface: "from-lining-soft/60 to-surface",
+    surface: "from-lining-soft/40 to-surface",
   },
 ];
 
@@ -132,10 +132,10 @@ export default function Home() {
       <section
         aria-labelledby="cta-title"
         className="relative overflow-hidden rounded-2xl px-6 py-12 text-center text-on-accent sm:px-12"
-        style={{ backgroundImage: "linear-gradient(100deg, #ffc247 0%, #ff9a3d 100%)" }}
+        style={{ backgroundImage: "linear-gradient(100deg, #f6c85a 0%, #f2a94a 100%)" }}
       >
-        <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 size-64 rounded-full bg-[#fff3b8]/30 blur-3xl" style={{ animation: "blob 12s ease-in-out infinite" }} />
-        <div aria-hidden className="pointer-events-none absolute -bottom-20 -right-10 size-72 rounded-full bg-[#ffd98a]/40 blur-3xl" style={{ animation: "blob 15s ease-in-out -5s infinite" }} />
+        <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 size-64 rounded-full bg-[#fff3b8]/20 blur-3xl" style={{ animation: "blob 12s ease-in-out infinite" }} />
+        <div aria-hidden className="pointer-events-none absolute -bottom-20 -right-10 size-72 rounded-full bg-[#ffd98a]/25 blur-3xl" style={{ animation: "blob 15s ease-in-out -5s infinite" }} />
         <h2 id="cta-title" className="relative font-display text-4xl font-semibold tracking-[0.01em] sm:text-5xl">Start tracing.</h2>
         <p className="relative mx-auto mt-3 max-w-[36ch] text-base font-medium">A free account keeps your place across devices.</p>
         <div className="relative mt-8 flex flex-wrap justify-center gap-3">

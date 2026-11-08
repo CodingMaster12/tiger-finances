@@ -1,7 +1,7 @@
 # Tiger Finances: project memory for Claude
 
-Read this first. Then read `docs/SPEC.md` (the product spec), `docs/DECISIONS.md` (what was decided and why)
-and `docs/NEXT_STEPS.md`. This file is the source of truth for state, rules and gotchas.
+Read this first. Then read `docs/SPEC.md` (the product spec), `docs/DECISIONS.md` (what was decided and why),
+`docs/NEXT_STEPS.md`, `PRODUCT.md` (product record) and **`DESIGN.md` (the design system: tokens, rules, do's and don'ts; follow it for any UI work)**. This file is the source of truth for state, rules and gotchas.
 
 ## What this is
 A Market Intelligence Terminal: an equity research web app for US and Canadian public companies with real
@@ -24,7 +24,7 @@ honest data handling, polished design. Product name: **Tiger Finances** (owner's
 - **Theme (changed twice on 2026-11-08):** the owner replaced the earlier "light, PayPal-style" direction. The site is **dark only**, ink-violet
   ground with an animated gradient backdrop (`body::before`). Gold is the brand anchor; highlight tones are orange, pink, violet, cyan and
   emerald (`--orange --pink --violet --cyan --lining`), gradients `.bg-hot/.bg-cool/.bg-fresh` are for fills only, never text. Eye-catching but
-  professional (owner's "0.75" setting; keep it there, do not push brighter without being asked): animated `HeroScene`, marquee and tile art on the
+  professional (owner's dial: 0 = first gold/black pass, 1 = bright pass; **now set to 0.6**, recorded in DESIGN.md; do not push it brighter or flatter without being asked): animated `HeroScene`, marquee and tile art on the
   home page, calm on data pages (Numbers, tables). Numbers live on `/numbers`, not the
   home page. Gains/losses always use arrow + sign + colour. Display face Jost (semibold, uppercase), body/numbers Inter. All motion stops
   under prefers-reduced-motion (verified). `PRODUCT.md` holds the product

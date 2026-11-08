@@ -1,12 +1,12 @@
 const items: { label: string; tone: string }[] = [
-  { label: "Income statements", tone: "border-accent/40 bg-accent-soft/70 text-brand" },
-  { label: "Balance sheets", tone: "border-cyan/40 bg-cyan-soft/70 text-cyan" },
-  { label: "Cash flow", tone: "border-violet/40 bg-violet-soft/70 text-violet" },
-  { label: "SEC filings", tone: "border-accent/40 bg-accent-soft/70 text-brand" },
-  { label: "US + Canada", tone: "border-lining/40 bg-lining-soft/70 text-lining" },
-  { label: "Annual + quarterly", tone: "border-cyan/40 bg-cyan-soft/70 text-cyan" },
-  { label: "Reported vs calculated", tone: "border-violet/40 bg-violet-soft/70 text-violet" },
-  { label: "Currency kept honest", tone: "border-lining/40 bg-lining-soft/70 text-lining" },
+  { label: "Income statements", tone: "border-accent/40 bg-accent-soft/50 text-brand" },
+  { label: "Balance sheets", tone: "border-cyan/40 bg-cyan-soft/50 text-cyan" },
+  { label: "Cash flow", tone: "border-violet/40 bg-violet-soft/50 text-violet" },
+  { label: "SEC filings", tone: "border-accent/40 bg-accent-soft/50 text-brand" },
+  { label: "US + Canada", tone: "border-lining/40 bg-lining-soft/50 text-lining" },
+  { label: "Annual + quarterly", tone: "border-cyan/40 bg-cyan-soft/50 text-cyan" },
+  { label: "Reported vs calculated", tone: "border-violet/40 bg-violet-soft/50 text-violet" },
+  { label: "Currency kept honest", tone: "border-lining/40 bg-lining-soft/50 text-lining" },
 ];
 
 function Row({ hidden }: { hidden?: boolean }) {
@@ -29,7 +29,7 @@ export function Marquee() {
       aria-label="What Tiger Finances covers"
       role="group"
     >
-      <div className="flex w-max [animation:marquee_80s_linear_infinite] group-hover:[animation-play-state:paused]">
+      <div className="flex w-max [animation:marquee_100s_linear_infinite] group-hover:[animation-play-state:paused]">
         <Row />
         <Row hidden />
       </div>
