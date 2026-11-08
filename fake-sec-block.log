@@ -1,5 +1,0 @@
-Fake SEC data server on http://localhost:4010 (blocking everything with 403)
-02:25:44 GET /submissions/CIK0001594805.json Tiger Finances https://github.com/CodingMaster12/tiger-finances
-02:25:45 GET /submissions/CIK0001594805.json Tiger Finances https://github.com/CodingMaster12/tiger-finances
-02:25:47 GET /submissions/CIK0001594805.json Tiger Finances https://github.com/CodingMaster12/tiger-finances
-02:25:51 GET /submissions/CIK0001594805.json Tiger Finances https://github.com/CodingMaster12/tiger-finances
