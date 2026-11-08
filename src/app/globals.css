@@ -1,76 +1,64 @@
 @import "tailwindcss";
 
 /*
- * Design tokens. Light is the working theme; the dark block is staged and
- * only activates with data-theme="dark" until the theme decision is made.
- * Direction: clean fintech (navy + bright blue, soft cool-grey surfaces).
+ * Design tokens. Dark theme only (owner decision, 2026-11-08).
+ * Palette: warm near-black ground, gold as the main colour with a hint of orange,
+ * and green as a thin "lining" for minor accents and text. Direction taken from the owner's
+ * reference image (dark, amber-lit, thin spaced type). Brand notes live in PRODUCT.md.
+ *
+ * Gains and losses never rely on colour: components pair an arrow and a +/- sign with --positive / --negative.
  */
 :root {
-  --bg: #f5f7fa;
-  --surface: #ffffff;
-  --surface-2: #eef2f7;
-  --border: #dde3ec;
-  --border-strong: #c3ccd9;
-  --text: #1a2233;
-  --text-muted: #5b6678;
-  --text-subtle: #7b8698;
+  color-scheme: dark;
 
-  --brand: #0b2a6f;
-  --accent: #0070e0;
-  --accent-hover: #005fc0;
-  --accent-soft: #e6f1fd;
-  --on-accent: #ffffff;
+  /* Ground and surfaces: warm blacks, lifted in small steps. */
+  --bg: #0b0a08;
+  --surface: #14120f;
+  --surface-2: #1d1a15;
+  --border: #2c2720;
+  --border-strong: #433b30;
 
-  --positive: #0a7a4b;
-  --positive-soft: #e3f5ec;
-  --negative: #c4262e;
-  --negative-soft: #fdeaeb;
-  --warning: #9a6200;
-  --warning-soft: #fff4de;
-  --info: #0070e0;
-  --info-soft: #e6f1fd;
+  /* Text: warm ivory, never pure white. */
+  --text: #f4eee1;
+  --text-muted: #bdb2a0;
+  --text-subtle: #918775;
 
-  --focus: #0070e0;
-  --shadow-sm: 0 1px 2px rgb(16 24 40 / 0.06);
-  --shadow-md: 0 4px 16px rgb(16 24 40 / 0.1);
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  /* Gold is the main colour; orange is the hint; green is the lining. */
+  --brand: #ecc15a;
+  --accent: #e9b43f;
+  --accent-hover: #f5c962;
+  --accent-soft: #2b2210;
+  --on-accent: #17110a;
+  --orange: #f08a3c;
+  --orange-soft: #33200f;
+  --lining: #7fd1a3;
+  --lining-soft: #10261b;
+
+  /* Meaning colours (always shown with an icon, sign or label too). */
+  --positive: #62d393;
+  --positive-soft: #0f2a1d;
+  --negative: #ff8272;
+  --negative-soft: #3a1713;
+  --warning: #f2a23a;
+  --warning-soft: #33220b;
+  --info: #8fbfdc;
+  --info-soft: #13232d;
+
+  --focus: #f5c962;
+
+  /* Depth: real offsets and blur. The glow is reserved for the primary action and the home visual. */
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.55);
+  --glow: 0 0 0 1px rgb(233 180 63 / 0.35), 0 6px 28px rgb(240 138 60 / 0.28);
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
 
   /* Chart series: stable per-company colors, distinguishable without hue alone via markers. */
-  --series-1: #0070e0;
-  --series-2: #e07b00;
-  --series-3: #7c3aed;
-  --series-benchmark: #8a94a6;
-}
-
-:root[data-theme="dark"] {
-  --bg: #0c1220;
-  --surface: #131b2e;
-  --surface-2: #1a2540;
-  --border: #26324d;
-  --border-strong: #35446a;
-  --text: #e8edf6;
-  --text-muted: #a3afc4;
-  --text-subtle: #8190aa;
-  --brand: #8db7ff;
-  --accent: #4a9bff;
-  --accent-hover: #6aaeff;
-  --accent-soft: #14305c;
-  --on-accent: #07111f;
-  --positive: #4cc38a;
-  --positive-soft: #11382a;
-  --negative: #ff7b82;
-  --negative-soft: #44181c;
-  --warning: #f0b550;
-  --warning-soft: #3b2c0e;
-  --info: #4a9bff;
-  --info-soft: #14305c;
-  --focus: #6aaeff;
-  --series-1: #4a9bff;
-  --series-2: #f0a04a;
-  --series-3: #b794f6;
-  --series-benchmark: #8190aa;
+  --series-1: #e9b43f;
+  --series-2: #5fc9a0;
+  --series-3: #b9a2f5;
+  --series-benchmark: #918775;
 }
 
 @theme inline {
@@ -87,20 +75,27 @@
   --color-accent-hover: var(--accent-hover);
   --color-accent-soft: var(--accent-soft);
   --color-on-accent: var(--on-accent);
+  --color-orange: var(--orange);
+  --color-orange-soft: var(--orange-soft);
+  --color-lining: var(--lining);
+  --color-lining-soft: var(--lining-soft);
   --color-positive: var(--positive);
   --color-positive-soft: var(--positive-soft);
   --color-negative: var(--negative);
   --color-negative-soft: var(--negative-soft);
   --color-warning: var(--warning);
   --color-warning-soft: var(--warning-soft);
+  --color-info: var(--info);
   --color-info-soft: var(--info-soft);
   --font-sans: var(--font-inter), system-ui, sans-serif;
+  --font-display: var(--font-jost), var(--font-inter), system-ui, sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
   --radius-sm: var(--radius-sm);
   --radius-md: var(--radius-md);
   --radius-lg: var(--radius-lg);
   --shadow-sm: var(--shadow-sm);
   --shadow-md: var(--shadow-md);
+  --shadow-glow: var(--glow);
 }
 
 body {
@@ -122,6 +117,23 @@ body {
   outline-offset: 2px;
 }
 
+/* Browser surfaces carry the palette too. */
+::selection {
+  background: rgb(233 180 63 / 0.35);
+  color: var(--text);
+}
+input,
+textarea {
+  caret-color: var(--accent);
+}
+html {
+  scrollbar-color: var(--border-strong) var(--bg);
+  scrollbar-width: thin;
+}
+a {
+  text-underline-offset: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -135,6 +147,17 @@ body {
 @keyframes shimmer {
   to {
     background-position: -200% 0;
+  }
+}
+
+/* Slow twinkle for the home visual's particles; switched off by the reduced-motion rule above. */
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: var(--o, 0.6);
+  }
+  50% {
+    opacity: calc(var(--o, 0.6) * 0.35);
   }
 }
 

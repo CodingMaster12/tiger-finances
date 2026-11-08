@@ -6,10 +6,10 @@ type Variant = "primary" | "secondary" | "ghost" | "danger";
 type Size = "sm" | "md";
 
 const variants: Record<Variant, string> = {
-  primary: "bg-accent text-on-accent hover:bg-accent-hover shadow-sm",
-  secondary: "bg-surface text-text border border-border-strong hover:bg-surface-2",
+  primary: "bg-accent text-on-accent hover:bg-accent-hover shadow-glow",
+  secondary: "bg-surface text-text border border-border-strong hover:border-accent hover:text-brand",
   ghost: "text-muted hover:bg-surface-2 hover:text-text",
-  danger: "bg-negative text-white hover:opacity-90",
+  danger: "bg-negative text-on-accent hover:opacity-90",
 };
 const sizes: Record<Size, string> = { sm: "h-8 px-3 text-[13px]", md: "h-10 px-4 text-sm" };
 
@@ -35,8 +35,8 @@ export function Button({
       disabled={disabled || loading}
       aria-busy={loading || undefined}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-full font-semibold transition-colors",
-        "disabled:cursor-not-allowed disabled:opacity-50",
+        "inline-flex items-center justify-center gap-2 rounded-md font-semibold transition-colors",
+        "disabled:cursor-not-allowed disabled:opacity-50 disabled:shadow-none",
         variants[variant],
         sizes[size],
         className,

@@ -14,7 +14,7 @@ import { useToast } from "@/components/ui/toast";
 
 const swatches = [
   ["bg", "Background"], ["surface", "Surface"], ["surface-2", "Surface 2"], ["border", "Border"],
-  ["brand", "Brand"], ["accent", "Accent"], ["positive", "Positive"], ["negative", "Negative"],
+  ["text", "Text"], ["text-muted", "Text muted"], ["brand", "Brand gold"], ["accent", "Accent gold"], ["orange", "Orange hint"], ["lining", "Green lining"], ["positive", "Positive"], ["negative", "Negative"],
   ["warning", "Warning"], ["series-1", "Series 1"], ["series-2", "Series 2"], ["series-3", "Series 3"],
 ];
 

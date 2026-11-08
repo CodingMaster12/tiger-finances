@@ -21,9 +21,11 @@ honest data handling, polished design. Product name: **Tiger Finances** (owner's
 - Be honest: say what was verified and what was not. Never claim untested things work. Mark dashboard labels
   you could not confirm as "(label may differ)". You cannot see their screen; ask for screenshots.
 - Ask before outward-facing or hard-to-reverse actions. Do not delete or overwrite without looking first.
-- The owner wanted the **theme question raised right before the frontend mock-up phase**; then they said
-  "theme is as is": light only for now. Dark tokens are staged in `globals.css` but there is no toggle.
-- Design direction: **PayPal-style fintech, lighter colours** (navy `--brand`, bright blue `--accent`, soft cool greys).
+- **Theme (changed 2026-11-08):** the owner replaced the earlier "light, PayPal-style" direction. The site is now **dark only**, using a
+  reference image (dark, amber-lit, thin wide-spaced type). Palette: gold as main colour with a hint of orange (`--orange`), green as a thin
+  "lining" for minor accents and text (`--lining`). Gains/losses always use arrow + sign + colour. Display face Jost, body/numbers Inter.
+  One decorative glowing-cube visual on the home page only; data tables and charts stay crisp (no glow). `PRODUCT.md` holds the product
+  record and brand commitments; the Impeccable design skill is installed in `.claude/skills/impeccable` (run `/impeccable` for design work).
 - No social login and no fake buttons. Username is unique, changeable once per 14 days.
 
 ## Stack
