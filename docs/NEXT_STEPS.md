@@ -19,7 +19,7 @@
    (https://github.com/apps/claude/installations/select_target) or reconnect GitHub at
    claude.ai → Settings → Connectors.
 5. SEC data needs no key, only a contact line. Set `SEC_USER_AGENT` to exactly `Tiger Finances https://github.com/CodingMaster12/tiger-finances` in the Claude environment and in Vercel (same way as step 2/3). Required in production. Then retry the live SEC check in a fresh session (the cloud address was being refused as an "undeclared automated tool").
-6. On your own computer (not the cloud, whose address the SEC throttles) run once: `SEC_USER_AGENT="Tiger Finances you@example.com" npm run sec:tickers`, then commit `src/lib/sec/data/company-tickers.json`. Until then search only knows three starter companies.
+6. On your own computer (not the cloud, whose address the SEC throttles) run once: `SEC_USER_AGENT="Tiger Finances https://github.com/CodingMaster12/tiger-finances" npm run sec:tickers`, then commit `src/lib/sec/data/company-tickers.json`. Until then search only knows three starter companies.
 
 ## Open items
 - Theme: light only for now (dark tokens staged, no setting yet).

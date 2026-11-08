@@ -101,7 +101,7 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - Known gaps: no e2e (Playwright) tests; no terms/privacy pages (the register form says "once they are published"); no custom SMTP.
 
 ## Roadmap (owner approved the plan; ask before each milestone starts)
-3. **Data layer: DONE (code).** SEC EDGAR fundamentals only; prices deferred (owner choice a). See `docs/SEC_EDGAR.md` and DECISIONS.md. Open: owner picks the `SEC_USER_AGENT` contact; run `npm run sec:tickers` on the owner's computer.
+3. **Data layer: DONE (code).** SEC EDGAR fundamentals only; prices deferred (owner choice a). See `docs/SEC_EDGAR.md` and DECISIONS.md. Contact chosen: `SEC_USER_AGENT=Tiger Finances https://github.com/CodingMaster12/tiger-finances` (owner must still set it in Vercel + Claude env). Open: run `npm run sec:tickers` on the owner's computer; retry the live SEC check.
 4. Global search + company overview page (no price/valuation yet). 5. Statements (annual + quarterly) + trend charts (revenue, earnings, margins, FCF; no price chart).
 6. Comparison (2–3 companies, normalize returns, handle currency/period mismatches, saved comparisons).
 7. Watchlists, notes, recently viewed, preferences. 8. Visual QA (browser), accessibility, e2e tests. 9. Docs and delivery.
