@@ -40,3 +40,7 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Impeccable design tool: machine-specific engine binary and local hook settings (re-created by the launcher / installer)
+.claude/skills/impeccable/scripts/bin/
+.claude/settings.local.json
