@@ -44,8 +44,13 @@ describe("createSecClient", () => {
     const fetchImpl = vi.fn().mockRejectedValueOnce(new Error("boom")).mockResolvedValueOnce(json({ a: 2 }));
     expect(await createSecClient({ ...fast, fetchImpl }).getJson("u")).toEqual({ a: 2 });
   });
-  it("gives up with rate_limited after repeated 403/429 answers", async () => {
+  it("stops quickly after a 403, because that means this address is blocked", async () => {
     const fetchImpl = vi.fn(async () => json("blocked", 403));
+    await expect(createSecClient({ ...fast, maxRetries: 3, fetchImpl }).getJson("u")).rejects.toMatchObject({ code: "rate_limited" });
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+  });
+  it("keeps retrying a 429 up to the limit, then reports rate_limited", async () => {
+    const fetchImpl = vi.fn(async () => json("slow down", 429));
     await expect(createSecClient({ ...fast, maxRetries: 2, fetchImpl }).getJson("u")).rejects.toMatchObject({ code: "rate_limited" });
     expect(fetchImpl).toHaveBeenCalledTimes(3);
   });

@@ -1,0 +1,51 @@
+# Downloads company filings from the SEC and saves them in Supabase (see scripts/sec-sync.mts).
+# The SEC refuses requests from shared cloud servers such as Vercel's, so this runs here instead,
+# and the website reads the saved copies from the database.
+#
+# Needs three repository secrets (Settings > Secrets and variables > Actions):
+#   SEC_USER_AGENT               Tiger Finances https://github.com/CodingMaster12/tiger-finances
+#   NEXT_PUBLIC_SUPABASE_URL     your Supabase project URL
+#   SUPABASE_SECRET_KEY          your Supabase secret key (never put it in code or chat)
+name: Sync SEC data
+
+on:
+  schedule:
+    - cron: "17 6 * * *" # every day at 06:17 UTC
+  workflow_dispatch: # the "Run workflow" button
+    inputs:
+      tickers:
+        description: "Extra tickers to fetch now, comma separated (optional)"
+        required: false
+        default: ""
+
+# Never run two syncs at once.
+concurrency:
+  group: sec-sync
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Sync
+        env:
+          SEC_USER_AGENT: ${{ secrets.SEC_USER_AGENT }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+          EXTRA_TICKERS: ${{ inputs.tickers }}
+        run: |
+          if [ -n "$EXTRA_TICKERS" ]; then
+            npm run sec:sync -- "--ticker=$EXTRA_TICKERS"
+          else
+            npm run sec:sync
+          fi

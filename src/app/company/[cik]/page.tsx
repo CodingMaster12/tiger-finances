@@ -7,15 +7,14 @@ import { Suspense } from "react";
 import { NumbersExplorer } from "@/components/numbers/numbers-explorer";
 import { Badge } from "@/components/ui/badge";
 import { Delta } from "@/components/ui/delta";
-import { ErrorState } from "@/components/ui/states";
+import { EmptyState, ErrorState } from "@/components/ui/states";
 import { formatDate, formatPercent, UNAVAILABLE } from "@/lib/format";
 import { formatValue } from "@/lib/sec/format-value";
 import { annualKeyMetrics } from "@/lib/sec/metrics";
-import { getSavedFinancials } from "@/lib/sec/sample";
-import { financialsService } from "@/lib/sec/service";
+import { daysSince } from "@/lib/sec/freshness";
+import { lookup } from "@/lib/sec/lookup";
 import { slimCompany } from "@/lib/sec/slim";
-import { describeSecError } from "@/lib/sec/user-errors";
-import { SecError, type CompanyFinancials } from "@/lib/sec/types";
+import type { CompanyFinancials } from "@/lib/sec/types";
 
 export const metadata: Metadata = {
   title: "Company",
@@ -48,7 +47,11 @@ function Chip({ children }: { children: React.ReactNode }) {
   return <span className="rounded-full bg-surface-2 px-3 py-1 text-xs font-semibold text-muted">{children}</span>;
 }
 
-function Overview({ f, saved }: { f: CompanyFinancials; saved: boolean }) {
+const STALE_AFTER_DAYS = 45;
+
+function Overview({ f, origin, retrievedAt }: { f: CompanyFinancials; origin: "database" | "live" | "saved"; retrievedAt: string | null }) {
+  const saved = origin === "saved";
+  const ageDays = daysSince(retrievedAt);
   const c = f.company;
   const slim = slimCompany(c.cik, c.tickers[0] ?? "", "gold", f);
   const m = annualKeyMetrics(f)[0];
@@ -89,13 +92,18 @@ function Overview({ f, saved }: { f: CompanyFinancials; saved: boolean }) {
         </div>
         <p className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-subtle">
           <span>
-            Source: SEC EDGAR · {saved ? "saved copy" : `retrieved ${formatDate(f.source.retrievedAt.slice(0, 10))}`}
+            Source: SEC EDGAR · {saved ? "saved copy" : `retrieved ${formatDate((retrievedAt ?? f.source.retrievedAt).slice(0, 10))}`}
           </span>
           <a href={f.source.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-muted hover:text-brand">
             Filings on sec.gov <ExternalLink className="size-3" aria-hidden />
             <span className="sr-only">(opens in a new tab)</span>
           </a>
         </p>
+        {origin === "database" && ageDays > STALE_AFTER_DAYS && (
+          <p role="note" className="mt-4 rounded-md border border-border-strong bg-surface px-4 py-3 text-sm text-muted">
+            These figures were last refreshed {ageDays} days ago. A newer filing may exist; the data is refreshed regularly.
+          </p>
+        )}
         {saved && (
           <p role="note" className="mt-4 rounded-md border border-border-strong bg-surface px-4 py-3 text-sm text-muted">
             Live data is unavailable right now, so this is a saved copy of the company&apos;s SEC filings. Figures may be out of date.
@@ -129,28 +137,43 @@ function Overview({ f, saved }: { f: CompanyFinancials; saved: boolean }) {
   );
 }
 
-type Loaded = { kind: "ok"; data: CompanyFinancials; saved: boolean } | { kind: "error"; title: string; message: string };
-
-async function load(cik: string): Promise<Loaded> {
-  try {
-    const { data, stale } = await financialsService.getCompanyFinancials(cik);
-    return { kind: "ok", data, saved: stale };
-  } catch (err) {
-    if (err instanceof SecError && err.code === "not_found") notFound();
-    const info = describeSecError(err);
-    const fallback = info.canFallBack ? getSavedFinancials(cik) : null;
-    if (fallback) return { kind: "ok", data: fallback, saved: true };
-    return { kind: "error", title: info.title, message: info.message };
-  }
+function QueuedNotice({ name, cik }: { name: string; cik: string }) {
+  return (
+    <div className="space-y-6">
+      <Link href="/search" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-brand">
+        <ArrowLeft className="size-4" aria-hidden /> Search
+      </Link>
+      <div className="rounded-lg border border-border bg-surface">
+        <EmptyState
+          title={`Adding ${toTitleCase(name)}`}
+          description="We do not have this company's filings saved yet. It has been queued and usually appears within a day. Check back soon."
+          action={
+            <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-sm font-semibold">
+              <Link href="/search" className="text-brand hover:underline">
+                Search another company
+              </Link>
+              <a href={`https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=${cik}&type=10-K`} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-muted hover:text-brand">
+                Filings on sec.gov <ExternalLink className="size-3.5" aria-hidden />
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            </div>
+          }
+        />
+      </div>
+    </div>
+  );
 }
 
 async function CompanyContent({ params }: { params: Promise<{ cik: string }> }) {
-  // Company data is fetched (and cached) per request, never at build time.
+  // Company data is looked up (and cached) per request, never at build time.
   await connection();
   const { cik } = await params;
   if (!/^\d{1,10}$/.test(cik)) notFound();
-  const result = await load(cik);
-  if (result.kind === "ok") return <Overview f={result.data} saved={result.saved} />;
+  const padded = cik.padStart(10, "0");
+  const result = await lookup(padded);
+  if (result.kind === "not_found") notFound();
+  if (result.kind === "ok") return <Overview f={result.data} origin={result.origin} retrievedAt={result.retrievedAt} />;
+  if (result.kind === "queued") return <QueuedNotice name={result.name} cik={padded} />;
   return (
     <div className="space-y-6">
       <Link href="/search" className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-brand">

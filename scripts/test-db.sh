@@ -21,4 +21,9 @@ PSQL="psql -h /tmp -p $PORT -U postgres -v ON_ERROR_STOP=1 -q"
 $PSQL -c "create database app" postgres
 $PSQL -d app -f supabase/tests/00_auth_stub.sql
 for f in supabase/migrations/*.sql; do echo "applying $f"; $PSQL -d app -f "$f"; done
-$PSQL -d app -f supabase/tests/rls.test.sql 2>&1 | grep -E "ok  |FAIL|PASSED|ERROR" 
+# service_role gets Supabase's default table privileges (RLS still applies to the public roles)
+$PSQL -d app -c "grant all on all tables in schema public to service_role"
+for f in supabase/tests/*.test.sql; do
+  echo "running $f"
+  $PSQL -d app -f "$f" 2>&1 | grep -E "ok  |FAIL|PASSED|ERROR"
+done

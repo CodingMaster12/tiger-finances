@@ -25,6 +25,11 @@
 - Theme: light only for now (dark tokens staged, no setting yet).
 - Email: Supabase's free sender is limited; custom SMTP needed before real users.
 
-## Milestone 4 status (search and company pages)
-- Built and tested against a local fake SEC server. To switch on real data: do step 5 above (set `SEC_USER_AGENT` in Vercel), then redeploy. The build then refreshes the company list from the SEC; if the SEC refuses Vercel's address the starter list of 3 companies stays and the company pages for those 3 fall back to saved copies.
-- If real company pages show "Live data is not connected yet" after step 5, the SEC is probably refusing Vercel's address; tell Claude and we will pick another way to get the data (for example a once-a-day cached refresh).
+## Milestone 4 status (search, company pages, data pipeline)
+The SEC refuses Vercel's servers (confirmed on the live site), so company data is fetched by a **sync job** from a connection the SEC accepts and saved in Supabase. The site reads the database.
+One-time setup (owner):
+1. **Apply the SQL**: Supabase dashboard > SQL Editor > New query > paste `supabase/migrations/20261109000001_sec_data.sql` > Run. You should see "Success". (Creates three tables.)
+2. **Add three GitHub secrets**: repo > Settings > Secrets and variables > Actions > New repository secret: `SEC_USER_AGENT` (`Tiger Finances https://github.com/CodingMaster12/tiger-finances`), `NEXT_PUBLIC_SUPABASE_URL` (Supabase project URL), `SUPABASE_SECRET_KEY` (Supabase secret key).
+3. **Run it once**: repo > Actions > "Sync SEC data" > Run workflow. It then runs daily by itself. Expect about 2-5 minutes; green tick = done.
+4. If the run fails with "THE SEC REFUSED THIS CONNECTION", GitHub's servers are blocked too: run the same job on your own computer instead (Claude will write click-by-click steps).
+After step 3 search finds every SEC company, and ~70 well-known companies have full pages. Any other company a visitor opens is queued and appears after the next daily run.

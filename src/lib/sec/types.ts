@@ -122,3 +122,52 @@ export interface CompanyFinancials {
   /** Honest, human-readable limits that apply to this company. */
   notes: string[];
 }
+
+// ---------------------------------------------------------------------------------------------
+// Validation for statements read back from the database. The job writes this shape; the website
+// re-checks it on every read so a bad or outdated row is ignored instead of breaking a page.
+// ---------------------------------------------------------------------------------------------
+/** Bump when the stored shape changes; rows with another version are treated as missing and re-fetched. */
+export const FINANCIALS_SCHEMA_VERSION = 1;
+
+const dataPointSchema = z.object({
+  value: z.number(),
+  unit: z.string(),
+  periodStart: z.string().nullable(),
+  periodEnd: z.string(),
+  form: z.string(),
+  filed: z.string(),
+  accession: z.string(),
+  concept: z.string(),
+  kind: z.enum(["reported", "calculated"]),
+  note: z.string().optional(),
+  restated: z.boolean().optional(),
+});
+const columnSchema = z.object({ periodEnd: z.string(), fiscalPeriod: z.enum(["FY", "Q1", "Q2", "Q3", "Q4"]) });
+const rowSchema = z.object({
+  key: z.string(),
+  label: z.string(),
+  unitType: z.enum(["money", "perShare", "shares"]),
+  values: z.array(dataPointSchema.nullable()),
+});
+const statementSchema = z.object({ id: z.enum(["income", "balance", "cashflow"]), title: z.string(), columns: z.array(columnSchema), rows: z.array(rowSchema) });
+const viewSchema = z.object({ statements: z.array(statementSchema) });
+
+export const companyFinancialsSchema = z.object({
+  company: z.object({
+    cik: z.string().regex(/^\d{10}$/),
+    name: z.string(),
+    tickers: z.array(z.string()),
+    exchanges: z.array(z.string()),
+    sic: z.string().nullable(),
+    industry: z.string().nullable(),
+    fiscalYearEnd: z.string().nullable(),
+    isFinancial: z.boolean(),
+  }),
+  currency: z.string().nullable(),
+  accountingStandard: z.enum(["us-gaap", "ifrs-full", "unknown"]),
+  annual: viewSchema,
+  quarterly: viewSchema,
+  source: z.object({ name: z.literal(SOURCE_NAME), url: z.string(), retrievedAt: z.string() }),
+  notes: z.array(z.string()),
+});

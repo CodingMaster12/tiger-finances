@@ -21,6 +21,7 @@
 | SEC contact (2026-11-08) | The SEC requires a contact in the User-Agent. **Owner chose the GitHub repo link, not an email.** Value for env var `SEC_USER_AGENT`: `Tiger Finances https://github.com/CodingMaster12/tiger-finances`. Must be set in Vercel and in the Claude cloud environment (a new session picks it up) |
 | Registration copy | Terms/privacy are not written; the form says "once they are published". Do not invent legal terms |
 | Milestone 4 scope (2026-11-08) | Search = local SEC company list (no live search calls), instant dropdown in header/home plus `/search` page. Company page = overview (chips, latest-year stats) with the statements table reused. No prices. Companies the SEC has no structured data for say so. If the SEC is unreachable, the three sample companies show a clearly labelled saved copy; others show a plain error. Trend charts stay in milestone 5 |
+| Data pipeline (2026-11-09) | **Owner chose option 2.** Verified live that the SEC returns 403 to Vercel, so company data comes from a sync job (GitHub scheduled job, or the owner's computer if GitHub is blocked) that saves normalized statements in Supabase; the site reads the database. Demand-driven: ~70 seed companies, plus a queue for companies visitors open; capped at 3000 companies / 500 pending to stay in the free tier. Build-time ticker refresh removed (blocked, redundant). The SEC contact stays the GitHub link; owner chose not to give an email |
 
 ## Milestone history
 1. Foundation (done): scaffold, tokens, UI kit, finance calculations + tests, shell, `/styleguide`.

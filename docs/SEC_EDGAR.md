@@ -175,3 +175,9 @@ Consequence: price chart, market cap, P/E, P/S, P/B, EV/EBITDA and dividend yiel
 - Freshness: APIs update in real time as filings arrive (submissions < 1 s, XBRL facts < 1 min typical).
 - Forms covered: 10-Q, 10-K, 8-K, 20-F, 40-F, 6-K and variants. Taxonomies: us-gaap, ifrs-full, dei, srt (custom extensions excluded).
 - Not found: schema docs for the ticker files; whether every 6-K carries XBRL (RY shows 6-K rows, so many do).
+
+## 11. Data pipeline (added 2026-11-09)
+Why: the SEC returns 403 ("undeclared automated tool") to shared cloud servers: this container (repeatedly) and Vercel (verified on the live site). So the website never depends on reaching the SEC.
+Flow: `sec-sync` job (scripts/sec-sync.mts, logic in src/lib/sec/sync.ts) -> SEC (companyfacts + submissions, at most 4 requests/second, declared User-Agent) -> same engine as section 4 -> Supabase `company_financials` (JSON, validated on read) ; the SEC company list -> `sec_company_list` ; visitor requests -> `sync_requests`.
+Per run: (1) refresh the company list; if the SEC refuses (403) stop at once, change nothing, exit 1. (2) Plan, in order: queued requests, explicit CIKs, missing seed tickers, stale rows (older than 7 days or old schema version). Capped per run (default 150) and in total (3000 companies). (3) For each: fetch, convert, save, clear the request; a company with no structured data is recorded as `not_covered` (3 attempts max).
+Site lookup order: database -> live SEC (works only if the SEC ever accepts the server; fails fast) -> saved copy (Apple, Shopify, Royal Bank) -> queue the company if it is on the SEC list -> plain error.

@@ -16,7 +16,7 @@ async function Results({ searchParams }: { searchParams: Promise<{ q?: string | 
   if (!q.trim()) {
     return <p className="text-sm text-muted">Type a company name or ticker above. Try Apple, Shopify or Royal Bank.</p>;
   }
-  const { query, results, complete } = runSearch(q, 25);
+  const { query, results, complete } = await runSearch(q, 25);
   return (
     <div className="space-y-4">
       <p className="text-sm text-muted" aria-live="polite">
