@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Wordmark } from "./app-shell";
 
 const columns = [
-  { title: "Explore", links: [{ href: "/", label: "Home" }, { href: "/numbers", label: "Numbers" }] },
+  { title: "Explore", links: [{ href: "/", label: "Home" }, { href: "/numbers", label: "Numbers" }, { href: "/search", label: "Search" }] },
   { title: "Account", links: [{ href: "/login", label: "Sign in" }, { href: "/register", label: "Create account" }, { href: "/account", label: "Settings" }] },
   { title: "Project", links: [{ href: "/styleguide", label: "Design system" }] },
 ];

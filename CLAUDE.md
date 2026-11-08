@@ -36,7 +36,7 @@ Next.js 16 (App Router, `cacheComponents` on), React 19, strict TypeScript, Tail
 Supabase (Auth + Postgres + RLS) via `@supabase/ssr`, Vitest, Playwright (installed; no e2e tests written yet), Vercel (Hobby).
 
 Commands: `npm run dev | build | lint | typecheck | test | test:db | sec:tickers`
-- `npm test`: unit tests (currently 127). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
+- `npm test`: unit tests (currently 165). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
   35 RLS and ownership assertions (no Docker needed; needs PG server binaries, which the cloud container has).
 - Before every commit: lint, typecheck, test, build all clean; run `test:db` when SQL changes.
 
@@ -55,6 +55,9 @@ Commands: `npm run dev | build | lint | typecheck | test | test:db | sec:tickers
 - `src/app/numbers` + `src/components/numbers` + `src/lib/sec/sample.ts`: the Numbers page, real statements from saved SEC filings (fixtures) for
   Apple, Shopify, Royal Bank, built with the same engine as live data will use. `src/components/home/*`: home scene, marquee, tile art.
   `src/components/layout/*`: header (`nav-links.tsx` marks the current page), footer, 404 at `src/app/not-found.tsx`.
+- Milestone 4 (search + company pages): `src/app/api/search` (JSON search), `src/app/search` (results page), `src/app/company/[cik]` (overview:
+  header chips, latest-year stats, statements via `NumbersExplorer`), `src/components/search/company-search.tsx` (ARIA combobox in the header and home hero),
+  `src/lib/sec/{search-service,user-errors,slim,format-value}.ts`. `getSavedFinancials` = saved copies of Apple/Shopify/Royal Bank used when the SEC is unreachable.
 - `src/components/ui/*`: design-system kit. Tokens in `src/app/globals.css`. `/styleguide` shows them.
 - `supabase/migrations/*.sql`, `supabase/tests/*`: schema, RLS, tests. `docs/`: guides.
 
@@ -80,6 +83,13 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - **Data licensing:** free tiers of Twelve Data, FMP, Alpha Vantage, Finnhub, Massive/Polygon, EODHD and Yahoo all forbid showing their data on a public multi-user site. Do not add them. SEC EDGAR is the approved source. Re-read terms before adding any provider.
 - **SEC rules:** max 10 req/s total, declared User-Agent with contact (`SEC_USER_AGENT`, required in production), cache hard. The SEC throttles shared cloud IPs (HTTP 403 "Request Rate Threshold Exceeded", lifts after ~10 min); the cloud container hit this repeatedly. Never loop on 403. Only `data.sec.gov` is fetched live; the ticker list is a committed snapshot.
 - EDGAR facts: `fy`/`fp` describe the filing, not the period; use start/end dates. Per-share values are never derived by subtraction. Never convert currencies in the SEC layer.
+- **Cache Components rules hit in milestone 4:** a Client Component using `usePathname()` must sit inside `<Suspense>` (NavLinks does) or any dynamic route fails
+  `next build`; a dynamic page that reads the clock or fetches must call `await connection()` first (company page does). `notFound()` inside `<Suspense>`
+  shows the 404 UI but returns HTTP 200 (known limitation). Run `npm run build`, not just dev, after touching routes.
+- **Testing SEC features from the cloud:** the SEC blocks the container, so run `npm run dev:sec-fixtures` (fake data.sec.gov on :4010, serves the saved fixtures;
+  `--block` simulates a 403) and start dev with `SEC_DATA_ORIGIN=http://localhost:4010 SEC_USER_AGENT="Tiger Finances https://github.com/CodingMaster12/tiger-finances"`.
+  Special CIKs: `0000000001` = no financial data, `0000000002` = always 403. The override is ignored in production on purpose.
+- The ticker list refreshes itself before each build (`scripts/prebuild-tickers.mjs`, needs `SEC_USER_AGENT`, never fails the build); manual: `npm run sec:tickers`.
 - Never run `pkill -f` / `pgrep -f` with a pattern that appears in your own command line: it kills your shell. Kill by port
   (`fuser -k 3100/tcp`). A stale `next start` on a port serves an old build.
 - A scaffold quirk: README edits via string-replace silently no-op'd once. Verify edits actually applied.
@@ -104,13 +114,13 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - **Done and verified live by the owner:** register, email confirmation, sign-in, session survives refresh, profile and
   username (14-day rule), preferences, password change, sign-out/in, password reset, header account menu.
 - **Not confirmed:** account deletion (needs `SUPABASE_SECRET_KEY`; owner was told to test it last).
-- **Built, not shown on pages yet:** SEC data layer (milestone 3, 127 tests incl. real-data fixtures for Apple, Shopify, Royal Bank). Live end-to-end check against the SEC could not be completed because the container IP was throttled (see gotchas); status in docs/NEXT_STEPS.md.
-- **Not built:** milestones 4–9: search UI, company pages, charts, comparison, watchlists, notes. **No prices** (owner decision): no price chart, market cap or valuation ratios.
+- **Built (milestones 3 and 4):** SEC data layer, global search (header, home, `/search`), company overview pages `/company/[cik]`, the Numbers sample page. Tested end to end in a real browser against a local fake SEC server (20 checks, plus the saved-copy fallback). **Not yet verified against the real SEC**: the cloud container is blocked and `SEC_USER_AGENT` is not set in Vercel; search lists only 3 companies until the ticker refresh succeeds (see docs/NEXT_STEPS.md).
+- **Not built:** milestones 5–9: trend charts, comparison, watchlists, notes. **No prices** (owner decision): no price chart, market cap or valuation ratios.
 - Known gaps: no e2e (Playwright) tests; no terms/privacy pages (the register form says "once they are published"); no custom SMTP.
 
 ## Roadmap (owner approved the plan; ask before each milestone starts)
 3. **Data layer: DONE (code).** SEC EDGAR fundamentals only; prices deferred (owner choice a). See `docs/SEC_EDGAR.md` and DECISIONS.md. Contact chosen: `SEC_USER_AGENT=Tiger Finances https://github.com/CodingMaster12/tiger-finances` (owner must still set it in Vercel + Claude env). Open: run `npm run sec:tickers` on the owner's computer; retry the live SEC check.
-4. Global search + company overview page (no price/valuation yet). 5. Statements (annual + quarterly) + trend charts (revenue, earnings, margins, FCF; no price chart).
+4. **Global search + company overview page: DONE (code; needs SEC_USER_AGENT in Vercel to go live with real data).** 5. Statements (annual + quarterly) + trend charts (revenue, earnings, margins, FCF; no price chart).
 6. Comparison (2–3 companies, normalize returns, handle currency/period mismatches, saved comparisons).
 7. Watchlists, notes, recently viewed, preferences. 8. Visual QA (browser), accessibility, e2e tests. 9. Docs and delivery.
 Use `Skill` guidance for charts/design if available. Inspect real layouts in Chromium (Playwright is installed) at desktop and mobile.

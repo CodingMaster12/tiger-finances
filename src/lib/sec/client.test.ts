@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
-import { createSecClient, resolveUserAgent } from "./client";
+import { createSecClient, resolveDataOrigin, resolveUserAgent } from "./client";
 import { SecError } from "./types";
 
 const json = (body: unknown, status = 200, headers: Record<string, string> = {}) =>
@@ -68,5 +68,22 @@ describe("createSecClient", () => {
     await Promise.all([client.getJson("a"), client.getJson("b"), client.getJson("c")]);
     expect(times[1] - times[0]).toBeGreaterThanOrEqual(35);
     expect(times[2] - times[1]).toBeGreaterThanOrEqual(35);
+  });
+});
+
+describe("resolveDataOrigin", () => {
+  it("defaults to the real SEC data server", () => {
+    expect(resolveDataOrigin({})).toBe("https://data.sec.gov");
+  });
+  it("allows a local fixture server outside production", () => {
+    expect(resolveDataOrigin({ SEC_DATA_ORIGIN: "http://localhost:4010", NODE_ENV: "development" })).toBe("http://localhost:4010");
+    expect(resolveDataOrigin({ SEC_DATA_ORIGIN: "http://127.0.0.1:4010", NODE_ENV: "test" })).toBe("http://127.0.0.1:4010");
+  });
+  it("ignores the override in production, so it can never redirect the live site", () => {
+    expect(resolveDataOrigin({ SEC_DATA_ORIGIN: "http://localhost:4010", NODE_ENV: "production" })).toBe("https://data.sec.gov");
+  });
+  it("only accepts a local address, never an arbitrary host", () => {
+    expect(resolveDataOrigin({ SEC_DATA_ORIGIN: "https://evil.example.com", NODE_ENV: "development" })).toBe("https://data.sec.gov");
+    expect(resolveDataOrigin({ SEC_DATA_ORIGIN: "http://localhost.evil.com", NODE_ENV: "development" })).toBe("https://data.sec.gov");
   });
 });

@@ -20,6 +20,7 @@
 | Prices (2026-11-08) | **Owner chose option (a): no prices for now.** No price chart, market cap, P/E, P/S, P/B, EV/EBITDA or dividend yield until a legal source exists. Open leads, unverified: embeddable chart widgets; Stooq/Tiingo terms; a paid licensed feed (needs owner approval) |
 | SEC contact (2026-11-08) | The SEC requires a contact in the User-Agent. **Owner chose the GitHub repo link, not an email.** Value for env var `SEC_USER_AGENT`: `Tiger Finances https://github.com/CodingMaster12/tiger-finances`. Must be set in Vercel and in the Claude cloud environment (a new session picks it up) |
 | Registration copy | Terms/privacy are not written; the form says "once they are published". Do not invent legal terms |
+| Milestone 4 scope (2026-11-08) | Search = local SEC company list (no live search calls), instant dropdown in header/home plus `/search` page. Company page = overview (chips, latest-year stats) with the statements table reused. No prices. Companies the SEC has no structured data for say so. If the SEC is unreachable, the three sample companies show a clearly labelled saved copy; others show a plain error. Trend charts stay in milestone 5 |
 
 ## Milestone history
 1. Foundation (done): scaffold, tokens, UI kit, finance calculations + tests, shell, `/styleguide`.
@@ -28,6 +29,7 @@ Post-launch fixes made while deploying: pinned framework in `vercel.json` (404 f
 after failed submit, hard redirects + session-keyed forms (stale red error), submit gated on all password rules, specific
 weak-password messages.
 
+4. Search + company overview (built 2026-11-08, `src/app/{search,company}`, 165 tests, browser-tested against a fake SEC server).
 3. SEC data layer (built 2026-11-08, `src/lib/sec`): period engine, statements, search, polite client, cache, 127 unit tests passing. Not wired to any page yet (milestone 4).
 
 ## Things the owner asked for that shape future work

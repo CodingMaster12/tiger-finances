@@ -7,6 +7,17 @@ import { SecError } from "./types";
  */
 export const SEC_DATA_ORIGIN = "https://data.sec.gov";
 
+/**
+ * Where to fetch SEC data. Development and tests may point this at a local fixture server with
+ * SEC_DATA_ORIGIN=http://localhost:PORT. It is ignored in production, so a stray variable can never
+ * redirect the live site.
+ */
+export function resolveDataOrigin(env: Record<string, string | undefined> = process.env): string {
+  const override = env.SEC_DATA_ORIGIN?.trim();
+  if (override && env.NODE_ENV !== "production" && /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(override)) return override;
+  return SEC_DATA_ORIGIN;
+}
+
 const DEV_USER_AGENT = "TigerFinances-dev/0.1 (local development; set SEC_USER_AGENT)";
 
 /** SEC_USER_AGENT must name the app and a contact, e.g. "Tiger Finances you@example.com". */

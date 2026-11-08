@@ -7,7 +7,8 @@ import { cn } from "@/components/ui/cn";
 import { Table, TableWrap, Td, Th } from "@/components/ui/data-table";
 import { Delta } from "@/components/ui/delta";
 import { formatPercent, UNAVAILABLE } from "@/lib/format";
-import type { SlimCompany, SlimPoint, SlimStatement } from "@/lib/sec/sample";
+import { formatValue } from "@/lib/sec/format-value";
+import type { SlimCompany, SlimStatement } from "@/lib/sec/slim";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 const monthYear = (iso: string) => `${MONTHS[Number(iso.slice(5, 7)) - 1]} ${iso.slice(0, 4)}`;
@@ -18,22 +19,6 @@ const ring: Record<SlimCompany["color"], string> = {
   pink: "border-pink bg-pink-soft text-text",
   cyan: "border-cyan bg-cyan-soft text-text",
 };
-
-/** Deterministic formatting (no Intl), so the server and the browser always print the same text. */
-function trim(n: number, digits: number): string {
-  return String(parseFloat(n.toFixed(digits)));
-}
-function formatValue(p: SlimPoint, unitType: "money" | "perShare" | "shares"): string {
-  const code = p.unit.slice(0, 3);
-  const prefix = code === "USD" ? "$" : `${code}\u00a0`;
-  const sign = p.v < 0 ? "\u2212" : "";
-  const abs = Math.abs(p.v);
-  if (unitType === "perShare") return `${sign}${prefix}${abs.toFixed(2)}`;
-  const steps: [number, string][] = [[1e12, "T"], [1e9, "B"], [1e6, "M"], [1e3, "K"]];
-  const hit = steps.find(([n]) => abs >= n);
-  const body = hit ? `${trim(abs / hit[0], 2)}${hit[1]}` : trim(abs, 2);
-  return unitType === "shares" ? `${sign}${body}` : `${sign}${prefix}${body}`;
-}
 
 function Segmented<T extends string>({ label, value, options, onChange }: { label: string; value: T; options: { id: T; label: string }[]; onChange: (v: T) => void }) {
   return (
@@ -100,7 +85,17 @@ function StatementTable({ s }: { s: SlimStatement }) {
   );
 }
 
-export function NumbersExplorer({ companies }: { companies: SlimCompany[] }) {
+/** Statement explorer. With one company the picker is hidden (company pages); with several it is a switcher (Numbers page). */
+export function NumbersExplorer({
+  companies,
+  showMetrics = true,
+  sourceLabel = "SEC EDGAR filings (saved copy)",
+}: {
+  companies: SlimCompany[];
+  /** The key-metric cards above the table. Company pages show their own, so they turn these off. */
+  showMetrics?: boolean;
+  sourceLabel?: string;
+}) {
   const [companyId, setCompanyId] = useState(companies[0].id);
   const [period, setPeriod] = useState<"annual" | "quarterly">("annual");
   const [statementId, setStatementId] = useState<SlimStatement["id"]>("income");
@@ -110,7 +105,7 @@ export function NumbersExplorer({ companies }: { companies: SlimCompany[] }) {
 
   return (
     <div className="space-y-6">
-      <div role="group" aria-label="Company" className="flex flex-wrap gap-3">
+      <div role="group" aria-label="Company" className={cn("flex flex-wrap gap-3", companies.length < 2 && "hidden")}>
         {companies.map((c) => (
           <button
             key={c.id}
@@ -133,17 +128,21 @@ export function NumbersExplorer({ companies }: { companies: SlimCompany[] }) {
         ))}
       </div>
 
-      <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
-        {company.metrics.map((m) => (
-          <div key={m.label} className="rounded-lg border border-border bg-surface px-4 py-3">
-            <dt className="text-xs text-muted">{m.label}</dt>
-            <dd className="mt-1 text-lg font-semibold">
-              {m.kind === "delta" ? <Delta value={m.value} /> : <span className="num">{m.value == null ? UNAVAILABLE : formatPercent(m.value, 1, false)}</span>}
-            </dd>
-          </div>
-        ))}
-      </dl>
-      <p className="-mt-3 text-xs text-subtle">Latest fiscal year, calculated from the reported figures below.</p>
+      {showMetrics && (
+        <>
+        <dl className="grid grid-cols-2 gap-3 md:grid-cols-4">
+          {company.metrics.map((m) => (
+            <div key={m.label} className="rounded-lg border border-border bg-surface px-4 py-3">
+              <dt className="text-xs text-muted">{m.label}</dt>
+              <dd className="mt-1 text-lg font-semibold">
+                {m.kind === "delta" ? <Delta value={m.value} /> : <span className="num">{m.value == null ? UNAVAILABLE : formatPercent(m.value, 1, false)}</span>}
+              </dd>
+            </div>
+          ))}
+        </dl>
+        <p className="-mt-3 text-xs text-subtle">Latest fiscal year, calculated from the reported figures below.</p>
+        </>
+      )}
 
       <Card className="overflow-hidden">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
@@ -162,7 +161,7 @@ export function NumbersExplorer({ companies }: { companies: SlimCompany[] }) {
         <StatementTable s={statement} />
         <div className="space-y-1 border-t border-border px-4 py-3 text-xs text-subtle">
           <p>
-            Source: SEC EDGAR filings (saved copy). {company.industry ? `${company.industry}. ` : ""}Hover a figure for its filing, date and accession number.
+            Source: {sourceLabel}. {company.industry ? `${company.industry}. ` : ""}Hover a figure for its filing, date and accession number.
           </p>
           {company.notes.map((n) => (
             <p key={n}>{n}</p>

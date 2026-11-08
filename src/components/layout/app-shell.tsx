@@ -3,6 +3,7 @@ import { Suspense, type ReactNode } from "react";
 import { isSupabaseConfigured } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/server";
 import { AccountMenu } from "./account-menu";
+import { CompanySearch } from "@/components/search/company-search";
 import { NavLinks } from "./nav-links";
 import { SiteFooter } from "./site-footer";
 
@@ -57,11 +58,17 @@ export function AppShell({ children }: { children: ReactNode }) {
         <div className="mx-auto flex h-14 max-w-7xl items-center gap-3 px-4 sm:gap-6 sm:px-6">
           <Wordmark />
           <NavLinks className="hidden items-center gap-1 sm:flex" />
+          <div className="hidden min-w-0 flex-1 md:block md:max-w-sm lg:max-w-md">
+            <CompanySearch size="header" />
+          </div>
           <Suspense fallback={<div aria-hidden className="ml-auto h-8 w-24" />}>
             <HeaderAccount />
           </Suspense>
         </div>
         <NavLinks className="flex items-center gap-1 overflow-x-auto border-t border-border px-3 py-1 sm:hidden" />
+        <div className="border-t border-border px-4 py-2 md:hidden">
+          <CompanySearch size="header" />
+        </div>
       </header>
       <main id="main" className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
         {children}

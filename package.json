@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "prebuild": "node scripts/prebuild-tickers.mjs",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -11,7 +12,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:db": "bash scripts/test-db.sh",
-    "sec:tickers": "node scripts/update-sec-tickers.mjs"
+    "sec:tickers": "node scripts/update-sec-tickers.mjs",
+    "dev:sec-fixtures": "node scripts/dev-sec-server.mjs"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",

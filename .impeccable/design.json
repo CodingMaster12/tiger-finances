@@ -1,6 +1,6 @@
 {
  "schemaVersion": 2,
- "generatedAt": "2026-11-08T02:12:54Z",
+ "generatedAt": "2026-11-08T02:27:41Z",
  "title": "Design System: Tiger Finances",
  "extensions": {
   "colorMeta": {
@@ -267,6 +267,13 @@
    "description": "Home tile: tinted surface, illustration area, title, one line, link.",
    "html": "<div class=\"ds-tile\"><div class=\"ds-art\"></div><span class=\"ds-chip ds-live\">Live</span><h3>Traced to the filing</h3><p>Every figure shows its source, period and currency.</p><a href=\"#\">See real statements &rarr;</a></div>",
    "css": ".ds-tile{max-width:340px;padding:24px;border-radius:12px;border:1px solid #2c2557;background:linear-gradient(135deg,rgba(31,21,69,.4),#130f26);color:#f6f3ff;font:14px Inter,system-ui,sans-serif;transition:transform .3s,border-color .3s}.ds-tile:hover{transform:translateY(-4px);border-color:#433a7d}.ds-art{height:90px;margin-bottom:12px;border-radius:8px;background:radial-gradient(60% 80% at 50% 50%,rgba(255,194,71,.18),transparent)}.ds-chip{display:inline-block;padding:4px 12px;border-radius:999px;font:600 12px Inter,sans-serif;background:#0d2f27;color:#3ee0a0}.ds-tile h3{margin:12px 0 4px;font:600 24px Jost,Inter,sans-serif;letter-spacing:.01em}.ds-tile p{margin:0 0 12px;color:#c4bcdf}.ds-tile a{color:#ffc247;font-weight:600;text-decoration:none}"
+  },
+  {
+   "name": "Company Search",
+   "kind": "input",
+   "description": "Combobox with a results panel: name, tickers and exchange per row; keyboard and screen-reader friendly.",
+   "html": "<div class=\"ds-search\"><input class=\"ds-search-in\" placeholder=\"Search a company or ticker\" value=\"app\"><ul class=\"ds-search-list\"><li class=\"ds-on\"><b>Apple Inc.</b><span>AAPL \u00b7 Nasdaq</span></li><li><b>Applied Materials</b><span>AMAT \u00b7 Nasdaq</span></li></ul></div>",
+   "css": ".ds-search{position:relative;max-width:420px;font:14px Inter,system-ui,sans-serif;color:#f6f3ff}.ds-search-in{width:100%;height:44px;padding:0 12px 0 36px;border-radius:10px;border:1px solid #ffc247;background:#130f26;color:#f6f3ff;font:15px Inter,sans-serif;box-shadow:0 0 0 3px rgba(255,194,71,.25)}.ds-search-in::placeholder{color:#9d94c0}.ds-search-list{list-style:none;margin:8px 0 0;padding:0;border:1px solid #2c2557;border-radius:10px;background:#130f26;box-shadow:0 10px 30px rgba(0,0,0,.55);overflow:hidden}.ds-search-list li{padding:10px 16px;border-bottom:1px solid #2c2557;cursor:pointer}.ds-search-list li:last-child{border-bottom:0}.ds-search-list b{display:block;font-weight:600}.ds-search-list span{font-size:12px;color:#c4bcdf}.ds-on{background:#1b1639}.ds-on b{color:#ffc247}"
   }
  ],
  "narrative": {

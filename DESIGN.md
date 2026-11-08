@@ -197,6 +197,9 @@ Soft but not round. Controls and tables use 10px (`--radius-md`); tiles and bann
 ### Navigation
 - Jost 13px uppercase, tracking 0.16em. Current page is Moon Text with a 2px gold-gradient underline and `aria-current="page"`; others are Muted and turn gold on hover. A second row appears under the header on phones. The footer repeats all links.
 
+### Company Search (combobox)
+- Night Surface field, 10px radius, magnifier icon at left, spinner at right while searching; 44-48px tall on the home page, 36px in the header. A results panel (Night Surface, hairline border, medium shadow) lists company name plus tickers and exchange; the highlighted row uses Raised Surface with the name in Lantern Gold (no side stripe). States: searching, no match (names the Canada limit), error (negative text). Keyboard: arrows, Enter, Escape; results are announced politely. Works without JavaScript by submitting to `/search`.
+
 ### Hero Scene (signature)
 - An isometric SVG skyline of translucent pillars in gold, cyan and violet, a floating gold-to-orange cube with two slow orbiting rings, a handful of rising sparks, and a faint floor grid, over soft drifting colour blobs. It nudges with the pointer. It is decorative only: `aria-hidden`, no labels, no numbers, and it must never resemble a chart.
 

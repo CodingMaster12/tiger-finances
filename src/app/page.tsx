@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { CompareArt, OrbitArt, TraceArt, WorkspaceArt } from "@/components/home/bento-art";
 import { HeroScene } from "@/components/home/hero-scene";
 import { Marquee } from "@/components/home/marquee";
+import { CompanySearch } from "@/components/search/company-search";
 
 interface Tile {
   title: string;
@@ -79,7 +80,16 @@ export default function Home() {
             </span>
           </h1>
           <p className="mt-6 max-w-[34ch] text-balance text-lg text-muted">Company financials from SEC filings, with the receipts.</p>
-          <div className="mt-8 flex flex-wrap items-center gap-3">
+          <div className="mt-7 max-w-md">
+            <CompanySearch size="hero" />
+            <p className="mt-3 text-[13px] text-subtle">
+              Try{" "}
+              <Link href="/company/0000320193" className="text-muted underline decoration-border-strong hover:text-brand">Apple</Link>,{" "}
+              <Link href="/company/0001594805" className="text-muted underline decoration-border-strong hover:text-brand">Shopify</Link> or{" "}
+              <Link href="/company/0001000275" className="text-muted underline decoration-border-strong hover:text-brand">Royal Bank</Link>
+            </p>
+          </div>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <Link
               href="/numbers"
               className="bg-hot inline-flex h-12 items-center gap-2 rounded-md px-7 text-[15px] font-semibold text-on-accent shadow-glow transition-[filter,transform] hover:-translate-y-0.5 hover:brightness-110"
