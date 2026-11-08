@@ -10,7 +10,7 @@ export function TraceArt() {
     <svg {...svgProps}>
       <defs>
         <linearGradient id="trace-line" x1="0" x2="1">
-          <stop offset="0" stopColor="#ffc247" /><stop offset="0.5" stopColor="#ff4f9a" /><stop offset="1" stopColor="#a584ff" />
+          <stop offset="0" stopColor="#ffc247" /><stop offset="1" stopColor="#a584ff" />
         </linearGradient>
       </defs>
       <path d="M70 85 C 130 20, 190 150, 270 85" fill="none" stroke="url(#trace-line)" strokeWidth="3" strokeLinecap="round" strokeDasharray="8 12" style={anim("dash-flow", 2.2, 0, "linear")} />
@@ -36,10 +36,10 @@ export function TraceArt() {
 export function CompareArt() {
   return (
     <svg {...svgProps}>
-      <path d="M0 100 C 50 40, 100 150, 160 90 S 280 40, 360 100" fill="none" stroke="#2fd6ff" strokeWidth="3.5" strokeLinecap="round" strokeDasharray="10 8" style={anim("dash-flow", 3, 0, "linear")} />
-      <path d="M0 80 C 60 140, 110 30, 180 90 S 290 140, 360 70" fill="none" stroke="#ff4f9a" strokeWidth="3.5" strokeLinecap="round" strokeDasharray="10 8" style={anim("dash-flow", 3.6, -1, "linear")} />
+      <path d="M0 100 C 50 40, 100 150, 160 90 S 280 40, 360 100" fill="none" stroke="#2fd6ff" strokeWidth="3" strokeLinecap="round" strokeDasharray="10 8" style={anim("dash-flow", 3, 0, "linear")} />
+      <path d="M0 80 C 60 140, 110 30, 180 90 S 290 140, 360 70" fill="none" stroke="#a584ff" strokeWidth="3" strokeLinecap="round" strokeDasharray="10 8" style={anim("dash-flow", 3.6, -1, "linear")} />
       <g style={anim("float", 4)}><circle cx="95" cy="94" r="7" fill="#2fd6ff" /><circle cx="95" cy="94" r="16" fill="#2fd6ff" fillOpacity="0.25" /></g>
-      <g style={anim("float", 5, -1.5)}><circle cx="255" cy="86" r="7" fill="#ff4f9a" /><circle cx="255" cy="86" r="16" fill="#ff4f9a" fillOpacity="0.25" /></g>
+      <g style={anim("float", 5, -1.5)}><circle cx="255" cy="86" r="7" fill="#a584ff" /><circle cx="255" cy="86" r="16" fill="#a584ff" fillOpacity="0.25" /></g>
     </svg>
   );
 }
@@ -48,7 +48,7 @@ export function CompareArt() {
 export function WorkspaceArt() {
   const layers = [
     { y: 112, c: "#a584ff", d: 0 },
-    { y: 70, c: "#ff4f9a", d: -1.4 },
+    { y: 70, c: "#2fd6ff", d: -1.4 },
     { y: 28, c: "#ffc247", d: -2.8 },
   ];
   return (

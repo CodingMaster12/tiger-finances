@@ -27,7 +27,7 @@ const tiles: Tile[] = [
     cta: "See real statements",
     art: <TraceArt />,
     span: "md:col-span-2",
-    surface: "from-violet-soft via-pink-soft to-surface",
+    surface: "from-violet-soft/60 to-surface",
   },
   {
     title: "Side by side",
@@ -38,7 +38,7 @@ const tiles: Tile[] = [
     cta: "Start with the numbers",
     art: <CompareArt />,
     span: "",
-    surface: "from-cyan-soft via-violet-soft to-surface",
+    surface: "from-cyan-soft/60 to-surface",
   },
   {
     title: "Your workspace",
@@ -49,7 +49,7 @@ const tiles: Tile[] = [
     cta: "Create account",
     art: <WorkspaceArt />,
     span: "",
-    surface: "from-accent-soft via-orange-soft to-surface",
+    surface: "from-accent-soft/70 to-surface",
   },
   {
     title: "US and Canada",
@@ -60,7 +60,7 @@ const tiles: Tile[] = [
     cta: "See Apple and Royal Bank",
     art: <OrbitArt />,
     span: "md:col-span-2",
-    surface: "from-lining-soft via-cyan-soft to-surface",
+    surface: "from-lining-soft/60 to-surface",
   },
 ];
 
@@ -71,11 +71,11 @@ export default function Home() {
         <div className="py-4 lg:py-10">
           <h1
             id="home-title"
-            className="font-display text-[clamp(2.6rem,6.2vw,5.4rem)] font-semibold uppercase leading-[1.02] tracking-[0.02em] text-text"
+            className="font-display text-[clamp(2.6rem,6.2vw,5.4rem)] font-semibold uppercase leading-[1.04] tracking-[0.015em] text-text"
           >
             Every number,
             <span className="mt-3 block">
-              <span className="bg-hot inline-block -skew-x-6 rounded-md px-3 pb-1 pt-0.5 text-on-accent">traced.</span>
+              <span className="bg-hot inline-block rounded-md px-3 pb-1 pt-0.5 text-on-accent">traced.</span>
             </span>
           </h1>
           <p className="mt-6 max-w-[34ch] text-balance text-lg text-muted">Company financials from SEC filings, with the receipts.</p>
@@ -88,14 +88,14 @@ export default function Home() {
             </Link>
             <Link
               href="/register"
-              className="inline-flex h-12 items-center rounded-md border border-border-strong bg-surface/60 px-7 text-[15px] font-semibold text-text transition-colors hover:border-pink hover:text-pink"
+              className="inline-flex h-12 items-center rounded-md border border-border-strong bg-surface/60 px-7 text-[15px] font-semibold text-text transition-colors hover:border-accent hover:text-brand"
             >
               Create account
             </Link>
           </div>
           <ul className="mt-8 flex flex-wrap gap-2 text-xs font-semibold">
             <li className="rounded-full bg-cyan-soft px-3 py-1 text-cyan">SEC filings</li>
-            <li className="rounded-full bg-pink-soft px-3 py-1 text-pink">US + Canada</li>
+            <li className="rounded-full bg-violet-soft px-3 py-1 text-violet">US + Canada</li>
             <li className="rounded-full bg-surface-2 px-3 py-1 text-muted">No prices yet</li>
           </ul>
         </div>
@@ -113,12 +113,12 @@ export default function Home() {
             <Link
               key={t.title}
               href={t.href}
-              className={`group relative flex flex-col overflow-hidden rounded-2xl border border-border bg-gradient-to-br ${t.surface} ${t.span} transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-border-strong`}
+              className={`group relative flex flex-col overflow-hidden rounded-xl border border-border bg-gradient-to-br ${t.surface} ${t.span} transition-[transform,border-color] duration-300 hover:-translate-y-1 hover:border-border-strong`}
             >
               <div className="h-56 px-4 pt-4">{t.art}</div>
               <div className="flex flex-1 flex-col gap-3 p-6 pt-3">
                 <span className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${t.chipTone}`}>{t.chip}</span>
-                <h3 className="font-display text-2xl font-semibold uppercase tracking-[0.03em]">{t.title}</h3>
+                <h3 className="font-display text-2xl font-semibold tracking-[0.01em]">{t.title}</h3>
                 <p className="max-w-[40ch] text-sm text-muted">{t.line}</p>
                 <span className="mt-auto inline-flex items-center gap-1.5 pt-2 text-sm font-semibold text-brand">
                   {t.cta} <ArrowRight className="size-4 transition-transform group-hover:translate-x-1" aria-hidden />
@@ -129,10 +129,14 @@ export default function Home() {
         </div>
       </section>
 
-      <section aria-labelledby="cta-title" className="bg-hot relative overflow-hidden rounded-3xl px-6 py-14 text-center text-on-accent sm:px-12">
-        <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 size-64 rounded-full bg-[#fff3b8]/40 blur-3xl" style={{ animation: "blob 12s ease-in-out infinite" }} />
-        <div aria-hidden className="pointer-events-none absolute -bottom-20 -right-10 size-72 rounded-full bg-[#7a3df0]/45 blur-3xl" style={{ animation: "blob 15s ease-in-out -5s infinite" }} />
-        <h2 id="cta-title" className="relative font-display text-4xl font-semibold uppercase tracking-[0.04em] sm:text-5xl">Start tracing.</h2>
+      <section
+        aria-labelledby="cta-title"
+        className="relative overflow-hidden rounded-2xl px-6 py-12 text-center text-on-accent sm:px-12"
+        style={{ backgroundImage: "linear-gradient(100deg, #ffc247 0%, #ff9a3d 100%)" }}
+      >
+        <div aria-hidden className="pointer-events-none absolute -left-10 -top-16 size-64 rounded-full bg-[#fff3b8]/30 blur-3xl" style={{ animation: "blob 12s ease-in-out infinite" }} />
+        <div aria-hidden className="pointer-events-none absolute -bottom-20 -right-10 size-72 rounded-full bg-[#ffd98a]/40 blur-3xl" style={{ animation: "blob 15s ease-in-out -5s infinite" }} />
+        <h2 id="cta-title" className="relative font-display text-4xl font-semibold tracking-[0.01em] sm:text-5xl">Start tracing.</h2>
         <p className="relative mx-auto mt-3 max-w-[36ch] text-base font-medium">A free account keeps your place across devices.</p>
         <div className="relative mt-8 flex flex-wrap justify-center gap-3">
           <Link href="/register" className="inline-flex h-12 items-center rounded-md bg-bg px-7 text-[15px] font-semibold text-text shadow-md transition-transform hover:-translate-y-0.5">

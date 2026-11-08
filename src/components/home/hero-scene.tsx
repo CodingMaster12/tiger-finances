@@ -30,13 +30,13 @@ const HUES = {
 const pillars: Box[] = [
   { x: 0.2, y: 0.4, w: 1, d: 1, h: 5.4, hue: "violet" },
   { x: 2.6, y: -0.8, w: 1.1, d: 1.1, h: 7.2, hue: "cyan" },
-  { x: 6.2, y: -0.2, w: 1, d: 1, h: 4.4, hue: "pink" },
-  { x: 8.4, y: 2.2, w: 0.9, d: 0.9, h: 3.4, hue: "emerald" },
+  { x: 6.2, y: -0.2, w: 1, d: 1, h: 4.4, hue: "gold" },
+  { x: 8.4, y: 2.2, w: 0.9, d: 0.9, h: 3.4, hue: "cyan" },
   { x: -1.4, y: 3.4, w: 0.9, d: 0.9, h: 3.6, hue: "gold" },
-  { x: 0.8, y: 6.6, w: 1, d: 1, h: 2.4, hue: "cyan" },
+  { x: 0.8, y: 6.6, w: 1, d: 1, h: 2.4, hue: "violet" },
   { x: 8.6, y: 6.2, w: 0.9, d: 0.9, h: 2.1, hue: "violet" },
-  { x: 5.2, y: 8.2, w: 1, d: 1, h: 3.1, hue: "pink" },
-  { x: 3.0, y: 9.2, w: 0.8, d: 0.8, h: 1.6, hue: "emerald" },
+  { x: 5.2, y: 8.2, w: 1, d: 1, h: 3.1, hue: "cyan" },
+  { x: 3.0, y: 9.2, w: 0.8, d: 0.8, h: 1.6, hue: "gold" },
 ];
 const cube = { x: 3.3, y: 3.3, w: 2.8, d: 2.8, h: 2.8 };
 
@@ -57,12 +57,12 @@ function rng(seed: number) {
     return s / 4294967296;
   };
 }
-const SPARK_COLORS = ["#ffd36f", "#ff4f9a", "#2fd6ff", "#a584ff", "#f6f3ff", "#3ee0a0"];
+const SPARK_COLORS = ["#ffd36f", "#2fd6ff", "#a584ff", "#f6f3ff"];
 const sparks = (() => {
   const r = rng(20261108);
-  return Array.from({ length: 46 }, (_, i) => {
+  return Array.from({ length: 24 }, (_, i) => {
     const [cx, cy] = iso(-2 + r() * 12.5, -1 + r() * 11, r() * 5);
-    return { cx, cy, r: 0.8 + r() * 1.8, o: 0.5 + r() * 0.5, c: SPARK_COLORS[i % SPARK_COLORS.length], dur: 5 + r() * 7, delay: -r() * 10 };
+    return { cx, cy, r: 0.8 + r() * 1.8, o: 0.4 + r() * 0.4, c: SPARK_COLORS[i % SPARK_COLORS.length], dur: 5 + r() * 7, delay: -r() * 10 };
   });
 })();
 const gridLines = (() => {
@@ -80,7 +80,7 @@ function Pillar({ box, index }: { box: Box; index: number }) {
   const style: CSSProperties = {
     transformBox: "fill-box",
     transformOrigin: "50% 100%",
-    animation: `breathe ${5 + (index % 4)}s ease-in-out ${-index * 0.9}s infinite`,
+    animation: `breathe ${8 + (index % 4)}s ease-in-out ${-index * 0.9}s infinite`,
   };
   return (
     <g style={style} stroke={c1} strokeOpacity="0.85" strokeWidth="1" strokeLinejoin="round">
@@ -127,14 +127,14 @@ export function HeroScene({ className }: { className?: string }) {
   return (
     <div ref={root} onPointerMove={onMove} onPointerLeave={onLeave} className={`relative isolate ${className ?? ""}`} aria-hidden="true">
       {/* Colour blobs. */}
-      <div style={layer(-18, -12)} className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-[8%] top-[10%] size-[46%] rounded-full bg-[#ffc247]/35 blur-3xl" style={{ animation: "blob 13s ease-in-out infinite" }} />
-        <div className="absolute right-[4%] top-[4%] size-[44%] rounded-full bg-[#a584ff]/45 blur-3xl" style={{ animation: "blob 16s ease-in-out -4s infinite" }} />
-        <div className="absolute bottom-[6%] left-[16%] size-[42%] rounded-full bg-[#ff4f9a]/40 blur-3xl" style={{ animation: "blob 18s ease-in-out -8s infinite" }} />
-        <div className="absolute bottom-[10%] right-[10%] size-[40%] rounded-full bg-[#2fd6ff]/35 blur-3xl" style={{ animation: "blob 15s ease-in-out -2s infinite" }} />
+      <div style={layer(-10, -7)} className="pointer-events-none absolute inset-0 -z-10">
+        <div className="absolute left-[8%] top-[10%] size-[46%] rounded-full bg-[#ffc247]/24 blur-3xl" style={{ animation: "blob 13s ease-in-out infinite" }} />
+        <div className="absolute right-[4%] top-[4%] size-[44%] rounded-full bg-[#a584ff]/30 blur-3xl" style={{ animation: "blob 16s ease-in-out -4s infinite" }} />
+        <div className="absolute bottom-[6%] left-[16%] size-[42%] rounded-full bg-[#ff8a3d]/20 blur-3xl" style={{ animation: "blob 18s ease-in-out -8s infinite" }} />
+        <div className="absolute bottom-[10%] right-[10%] size-[40%] rounded-full bg-[#2fd6ff]/22 blur-3xl" style={{ animation: "blob 15s ease-in-out -2s infinite" }} />
       </div>
 
-      <div style={layer(14, 9)}>
+      <div style={layer(8, 5)}>
         <svg viewBox="0 0 660 560" className="block h-auto w-full" focusable="false" role="presentation">
           <defs>
             {Object.entries(HUES).map(([name, [a, b]]) => (
@@ -150,7 +150,7 @@ export function HeroScene({ className }: { className?: string }) {
               </g>
             ))}
             <radialGradient id="floor-glow" cx="50%" cy="50%" r="50%">
-              <stop offset="0" stopColor="#ff4f9a" stopOpacity="0.6" />
+              <stop offset="0" stopColor="#ff8a3d" stopOpacity="0.5" />
               <stop offset="0.5" stopColor="#ffc247" stopOpacity="0.2" />
               <stop offset="1" stopColor="#ffc247" stopOpacity="0" />
             </radialGradient>
@@ -163,10 +163,10 @@ export function HeroScene({ className }: { className?: string }) {
               <stop offset="0" stopColor="#fff3b8" /><stop offset="1" stopColor="#ffc247" />
             </linearGradient>
             <linearGradient id="cube-left" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0" stopColor="#ffb02e" /><stop offset="1" stopColor="#ff6a3d" />
+              <stop offset="0" stopColor="#ffbb3a" /><stop offset="1" stopColor="#ff8a3d" />
             </linearGradient>
             <linearGradient id="cube-right" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0" stopColor="#ff4f9a" /><stop offset="1" stopColor="#7a3df0" />
+              <stop offset="0" stopColor="#e8662f" /><stop offset="1" stopColor="#7a52e0" />
             </linearGradient>
             <filter id="soft" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="16" /></filter>
           </defs>
@@ -182,9 +182,9 @@ export function HeroScene({ className }: { className?: string }) {
 
           {behind.map((b, i) => <Pillar key={`b${i}`} box={b} index={i} />)}
 
-          <Ring rx={190} tilt={-14} color="#2fd6ff" dur={16} />
-          <g style={{ animation: "float 6s ease-in-out infinite" }}>
-            <polygon points={c.top} fill="#ff4f9a" opacity="0.65" filter="url(#soft)" />
+          <Ring rx={190} tilt={-14} color="#2fd6ff" dur={28} />
+          <g style={{ animation: "float 8s ease-in-out infinite" }}>
+            <polygon points={c.top} fill="#ff8a3d" opacity="0.5" filter="url(#soft)" />
             <polygon points={c.left} fill="url(#cube-left)" />
             <polygon points={c.right} fill="url(#cube-right)" />
             <polygon points={c.top} fill="url(#cube-top)" />
@@ -194,7 +194,7 @@ export function HeroScene({ className }: { className?: string }) {
               <line x1={iso(cube.x + cube.w, cube.y + cube.d, cube.h)[0]} y1={iso(cube.x + cube.w, cube.y + cube.d, cube.h)[1]} x2={iso(cube.x + cube.w, cube.y + cube.d, 0)[0]} y2={iso(cube.x + cube.w, cube.y + cube.d, 0)[1]} />
             </g>
           </g>
-          <Ring rx={150} tilt={22} color="#ff4f9a" dur={11} reverse />
+          <Ring rx={150} tilt={22} color="#ffc247" dur={22} reverse />
 
           {inFront.map((b, i) => <Pillar key={`f${i}`} box={b} index={i + behind.length} />)}
 

@@ -23,8 +23,9 @@ honest data handling, polished design. Product name: **Tiger Finances** (owner's
 - Ask before outward-facing or hard-to-reverse actions. Do not delete or overwrite without looking first.
 - **Theme (changed twice on 2026-11-08):** the owner replaced the earlier "light, PayPal-style" direction. The site is **dark only**, ink-violet
   ground with an animated gradient backdrop (`body::before`). Gold is the brand anchor; highlight tones are orange, pink, violet, cyan and
-  emerald (`--orange --pink --violet --cyan --lining`), gradients `.bg-hot/.bg-cool/.bg-fresh` are for fills only, never text. Flashy on
-  the home page (animated `HeroScene`, marquee, animated tile art), calm on data pages (Numbers, tables). Numbers live on `/numbers`, not the
+  emerald (`--orange --pink --violet --cyan --lining`), gradients `.bg-hot/.bg-cool/.bg-fresh` are for fills only, never text. Eye-catching but
+  professional (owner's "0.75" setting; keep it there, do not push brighter without being asked): animated `HeroScene`, marquee and tile art on the
+  home page, calm on data pages (Numbers, tables). Numbers live on `/numbers`, not the
   home page. Gains/losses always use arrow + sign + colour. Display face Jost (semibold, uppercase), body/numbers Inter. All motion stops
   under prefers-reduced-motion (verified). `PRODUCT.md` holds the product
   record and brand commitments; the Impeccable design skill is installed in `.claude/skills/impeccable` (run `/impeccable` for design work).

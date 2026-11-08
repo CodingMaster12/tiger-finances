@@ -52,14 +52,14 @@
   --focus: #ffd36f;
 
   /* Gradients for fills, backgrounds and highlights (never for text). */
-  --grad-hot: linear-gradient(100deg, #ffc247 0%, #ff8a3d 45%, #ff4f9a 100%);
+  --grad-hot: linear-gradient(100deg, #ffc247 0%, #ff9a3d 65%, #ff7a59 100%);
   --grad-cool: linear-gradient(100deg, #2fd6ff 0%, #9b6bff 55%, #ff4f9a 100%);
   --grad-fresh: linear-gradient(100deg, #3ee0a0 0%, #2fd6ff 100%);
 
   /* Depth: real offsets and blur. Glow is for primary actions and the home scene. */
   --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.5);
   --shadow-md: 0 10px 30px rgb(0 0 0 / 0.55);
-  --glow: 0 0 0 1px rgb(255 194 71 / 0.4), 0 8px 30px rgb(255 79 154 / 0.3);
+  --glow: 0 0 0 1px rgb(255 194 71 / 0.3), 0 6px 22px rgb(255 138 61 / 0.22);
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
@@ -130,11 +130,11 @@ body::before {
   z-index: -1;
   pointer-events: none;
   background:
-    radial-gradient(40% 35% at 14% 10%, rgb(255 194 71 / 0.2), transparent 70%),
-    radial-gradient(38% 34% at 88% 8%, rgb(165 132 255 / 0.3), transparent 70%),
-    radial-gradient(42% 38% at 80% 80%, rgb(47 214 255 / 0.16), transparent 70%),
-    radial-gradient(40% 36% at 8% 86%, rgb(255 79 154 / 0.2), transparent 70%);
-  animation: bg-drift 30s ease-in-out infinite alternate;
+    radial-gradient(40% 35% at 14% 10%, rgb(255 194 71 / 0.14), transparent 70%),
+    radial-gradient(38% 34% at 88% 8%, rgb(165 132 255 / 0.2), transparent 70%),
+    radial-gradient(42% 38% at 80% 80%, rgb(47 214 255 / 0.1), transparent 70%),
+    radial-gradient(40% 36% at 8% 86%, rgb(255 79 154 / 0.1), transparent 70%);
+  animation: bg-drift 40s ease-in-out infinite alternate;
 }
 
 /* Financial figures: tabular numerals so columns align. */
@@ -150,7 +150,7 @@ body::before {
 
 /* Browser surfaces carry the palette too. */
 ::selection {
-  background: rgb(255 79 154 / 0.45);
+  background: rgb(255 194 71 / 0.4);
   color: var(--text);
 }
 input,
@@ -176,11 +176,11 @@ a {
 }
 @keyframes float {
   0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-14px); }
+  50% { transform: translateY(-8px); }
 }
 @keyframes breathe {
-  0%, 100% { transform: scaleY(0.82); }
-  50% { transform: scaleY(1.04); }
+  0%, 100% { transform: scaleY(0.9); }
+  50% { transform: scaleY(1.02); }
 }
 @keyframes marquee {
   to { transform: translateX(-50%); }
@@ -198,7 +198,7 @@ a {
 }
 @keyframes blob {
   0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
-  50% { transform: translate3d(5%, -6%, 0) scale(1.15); }
+  50% { transform: translate3d(3%, -4%, 0) scale(1.08); }
 }
 @keyframes shimmer {
   to { background-position: -200% 0; }
