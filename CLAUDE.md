@@ -60,7 +60,7 @@ Commands: `npm run dev | build | lint | typecheck | test | test:db | sec:tickers
   `src/lib/sec/{search-service,user-errors,slim,format-value}.ts`. `getSavedFinancials` = saved copies of Apple/Shopify/Royal Bank used when the SEC is unreachable.
 - **SEC data pipeline (milestone 4b):** the SEC refuses Vercel's servers (verified live 2026-11-09), so a sync job runs from a connection the SEC accepts and stores
   normalized statements in Supabase; the site reads the database. `scripts/sec-sync.mts` (`npm run sec:sync`, via `tsx`) + `src/lib/sec/sync.ts` (testable logic) +
-  `.github/workflows/sec-sync.yml` (daily + manual button). Site side: `store.ts` (Supabase reads/writes, validated), `lookup.ts` (database, then live SEC, then saved copy,
+  `scripts/mac-sync.sh` (the helper the owner runs on their Mac), `.github/workflows/sec-sync.yml` (manual only, GitHub is blocked). Site side: `store.ts` (Supabase reads/writes, validated), `lookup.ts` (database, then live SEC, then saved copy,
   then queue the company), `company-list.ts` (full SEC list from the database, else the starter list), `supabase/public.ts` (read-only client).
   Seed list: `scripts/seed-tickers.json`. Queue + 3000-company cap keep the free database bounded.
 - `src/components/ui/*`: design-system kit. Tokens in `src/app/globals.css`. `/styleguide` shows them.
@@ -89,6 +89,9 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - Email links use PKCE: they must be opened **in the same browser** that requested them. Supabase's free built-in email sender is
   rate-limited and may only deliver to the owner's own team address; custom SMTP is needed before real users.
 - **Data licensing:** free tiers of Twelve Data, FMP, Alpha Vantage, Finnhub, Massive/Polygon, EODHD and Yahoo all forbid showing their data on a public multi-user site. Do not add them. SEC EDGAR is the approved source. Re-read terms before adding any provider.
+- **The SEC blocks GitHub's servers too** (first manual run of the workflow, 2026-11-09: 403 on the very first request; the job stopped cleanly). So the sync job runs on the OWNER'S COMPUTER:
+  `bash scripts/mac-sync.sh` (asks once for the Supabase URL + secret key, stores them in `~/.tiger-finances-sync.env` with 600 permissions; never ask the owner to paste the key in chat).
+  The GitHub workflow's daily schedule was removed; the manual button remains only to retry later.
 - **The SEC blocks Vercel too** (verified live: company pages got 403s). Never call the SEC from the website as the main path; the sync job fills the database. The 403 handling
   fails fast (one retry). GitHub Actions cannot be controlled from the cloud session (proxy blocks the Actions API), so the owner triggers/monitors it.
 - **SEC rules:** max 10 req/s total, declared User-Agent with contact (`SEC_USER_AGENT`, required in production), cache hard. The SEC throttles shared cloud IPs (HTTP 403 "Request Rate Threshold Exceeded", lifts after ~10 min); the cloud container hit this repeatedly. Never loop on 403. Only `data.sec.gov` is fetched live; the ticker list is a committed snapshot.
@@ -125,7 +128,7 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - **Done and verified live by the owner:** register, email confirmation, sign-in, session survives refresh, profile and
   username (14-day rule), preferences, password change, sign-out/in, password reset, header account menu.
 - **Not confirmed:** account deletion (needs `SUPABASE_SECRET_KEY`; owner was told to test it last).
-- **Built (milestones 3, 4, 4b):** SEC data layer, global search, company pages, Numbers sample page, and the data pipeline (sync job, database tables, lookup with queue). Tested in a real browser against a fake SEC server (20 checks), plus 211 unit tests and 55 database tests. **Real-world status:** needs the owner to (1) apply the SQL migration, (2) add three GitHub secrets, (3) run the workflow once; until then the live site shows saved copies for the 3 sample companies. See docs/NEXT_STEPS.md.
+- **Built (milestones 3, 4, 4b):** SEC data layer, global search, company pages, Numbers sample page, and the data pipeline (sync job, database tables, lookup with queue). Tested in a real browser against a fake SEC server (20 checks), plus 211 unit tests and 55 database tests. **Real-world status:** SQL migration applied by the owner (verified: tables exist, RLS correct). The GitHub run was refused by the SEC; next is the owner running `bash scripts/mac-sync.sh` once on their Mac. Until then the live site shows saved copies for the 3 sample companies. See docs/NEXT_STEPS.md.
 - **Not built:** milestones 5–9: trend charts, comparison, watchlists, notes. **No prices** (owner decision): no price chart, market cap or valuation ratios.
 - Known gaps: no e2e (Playwright) tests; no terms/privacy pages (the register form says "once they are published"); no custom SMTP.
 

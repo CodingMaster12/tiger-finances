@@ -27,9 +27,11 @@
 
 ## Milestone 4 status (search, company pages, data pipeline)
 The SEC refuses Vercel's servers (confirmed on the live site), so company data is fetched by a **sync job** from a connection the SEC accepts and saved in Supabase. The site reads the database.
-One-time setup (owner):
-1. **Apply the SQL**: Supabase dashboard > SQL Editor > New query > paste `supabase/migrations/20261109000001_sec_data.sql` > Run. You should see "Success". (Creates three tables.)
-2. **Add three GitHub secrets**: repo > Settings > Secrets and variables > Actions > New repository secret: `SEC_USER_AGENT` (`Tiger Finances https://github.com/CodingMaster12/tiger-finances`), `NEXT_PUBLIC_SUPABASE_URL` (Supabase project URL), `SUPABASE_SECRET_KEY` (Supabase secret key).
-3. **Run it once**: repo > Actions > "Sync SEC data" > Run workflow. It then runs daily by itself. Expect about 2-5 minutes; green tick = done.
-4. If the run fails with "THE SEC REFUSED THIS CONNECTION", GitHub's servers are blocked too: run the same job on your own computer instead (Claude will write click-by-click steps).
-After step 3 search finds every SEC company, and ~70 well-known companies have full pages. Any other company a visitor opens is queued and appears after the next daily run.
+Status: SQL applied (verified from the cloud: tables exist, public tables readable and empty, queue private). GitHub's servers were refused by the SEC (403), so the job runs on the owner's Mac.
+Owner steps (Mac):
+1. Download `https://github.com/CodingMaster12/tiger-finances/archive/refs/heads/main.zip` (or the milestone-4c-mac-sync branch zip before it is merged) and double-click it in Downloads to unzip.
+2. Install Node.js if needed: nodejs.org, big green LTS button, open the file, Continue until done (the script tells you if it is missing).
+3. Open Terminal (Cmd+Space, type Terminal, Enter) and run: `bash ~/Downloads/tiger-finances-main/scripts/mac-sync.sh` (folder name = the zip's folder).
+4. First run only: paste the Supabase project URL, then the Supabase secret key (hidden as you type; never paste it in chat). Wait 1-3 minutes for "Finished".
+5. Re-run the same command whenever you want newer data or to add companies visitors asked for (the queue is processed each run). It is safe to run any time.
+Optional later: schedule it automatically on the Mac (launchd) if wanted.
