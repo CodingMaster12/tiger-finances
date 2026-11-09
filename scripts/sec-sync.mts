@@ -9,6 +9,8 @@
  *   --ticker=AAPL,MSFT   also fetch these tickers          --cik=320193      also fetch these company numbers
  *   --max=150            most companies per run            --refresh-days=7  re-fetch companies older than this
  *   --no-seed            skip the built-in starter list    --no-list         do not refresh the SEC company list
+ *   --list-file=PATH     use a company list you downloaded in your browser from
+ *                        https://www.sec.gov/files/company_tickers_exchange.json (save the page as a .json file)
  *   --dry-run            fetch nothing from Supabase, write nothing (still talks to the SEC unless --fixtures)
  *   --fixtures           use the saved fixture filings instead of the SEC (offline testing of the whole pipeline)
  */
@@ -17,6 +19,7 @@ import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { createSecClient, resolveDataOrigin } from "../src/lib/sec/client-core";
 import { SecError } from "../src/lib/sec/types";
 import { runSync, type SyncStore } from "../src/lib/sec/sync";
+import { parseTickerFile } from "../src/lib/sec/ticker-file";
 import { listStored, listSyncQueue, readCompanyList, recordSyncResult, writeCompanyList, writeFinancials } from "../src/lib/sec/store";
 import { loadTickerSnapshot } from "../src/lib/sec/tickers";
 
@@ -81,6 +84,15 @@ function makeFetch(): { fetchJson: (url: string) => Promise<unknown>; now: () =>
 }
 
 const { fetchJson, now } = makeFetch();
+const listFile = value("list-file");
+let listRows: ReturnType<typeof parseTickerFile> | undefined;
+if (listFile) {
+  try {
+    listRows = parseTickerFile(JSON.parse(readFileSync(listFile.replace(/^~(?=\/)/, process.env.HOME ?? "~"), "utf8")));
+  } catch (err) {
+    die(`Could not use the company list file: ${err instanceof Error ? err.message : err}`);
+  }
+}
 const seeds = flag("no-seed") ? [] : (JSON.parse(readFileSync(new URL("./seed-tickers.json", import.meta.url), "utf8")) as string[]);
 
 const summary = await runSync(
@@ -90,6 +102,7 @@ const summary = await runSync(
     maxCompanies: Number(value("max") ?? 150),
     refreshAfterDays: Number(value("refresh-days") ?? 7),
     refreshList: !flag("no-list") && !fixtures,
+    listRows,
   },
   { fetchJson, store: makeStore(), now, log, dataOrigin: resolveDataOrigin(), fallbackList: loadTickerSnapshot().entries },
 );

@@ -35,6 +35,8 @@ export interface SyncOptions {
   maxCompanies: number;
   refreshAfterDays: number;
   refreshList: boolean;
+  /** A company list the owner downloaded in a browser (the SEC's list server often refuses scripts). Used instead of fetching. */
+  listRows?: TickerRow[];
 }
 
 export interface SyncSummary {
@@ -54,22 +56,24 @@ export async function runSync(opts: SyncOptions, deps: SyncDeps): Promise<SyncSu
   const summary: SyncSummary = { listUpdated: false, planned: 0, saved: 0, failed: [], unknownTickers: [], blocked: false };
   const now = deps.now();
 
-  // 1. The company list (resolves tickers, powers search).
+  // 1. The company list (resolves tickers, powers search). It lives on a different SEC server (www.sec.gov) than the
+  //    financial data (data.sec.gov), and that server often refuses scripts. A refusal here is NOT fatal: we carry on
+  //    with the saved list and let the data requests below decide whether the SEC accepts this connection.
   let entries: TickerEntry[] | null = null;
-  if (opts.refreshList) {
+  if (opts.listRows || opts.refreshList) {
     try {
-      const rows = parseTickerFile(await deps.fetchJson(TICKER_FILE_URL));
+      const rows = opts.listRows ?? parseTickerFile(await deps.fetchJson(TICKER_FILE_URL));
       await store.writeCompanyList(rows, now.toISOString());
       entries = rows.map(([cik, name, ticker, exchange]) => ({ cik: padCik(cik), name, ticker, exchange }));
       summary.listUpdated = true;
-      log(`Company list saved: ${rows.length} companies.`);
+      log(`Company list saved: ${rows.length} companies${opts.listRows ? " (from the file you provided)" : ""}.`);
     } catch (err) {
-      if (err instanceof SecError && err.code === "rate_limited") {
-        summary.blocked = true;
-        log("The SEC refused this connection (403). Stopping: nothing was changed.");
-        return summary;
-      }
-      log(`Could not refresh the company list (${err instanceof Error ? err.message : err}); using the saved one.`);
+      const refused = err instanceof SecError && err.code === "rate_limited";
+      log(
+        refused
+          ? "The SEC's company-list server (www.sec.gov) refused this connection. Carrying on without refreshing the list; the saved list stays in use. (You can supply the list yourself with --list-file.)"
+          : `Could not refresh the company list (${err instanceof Error ? err.message : err}); using the saved one.`,
+      );
     }
   }
   entries ??= (await store.readCompanyList()) ?? deps.fallbackList;

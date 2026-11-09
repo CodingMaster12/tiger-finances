@@ -36,7 +36,7 @@ Next.js 16 (App Router, `cacheComponents` on), React 19, strict TypeScript, Tail
 Supabase (Auth + Postgres + RLS) via `@supabase/ssr`, Vitest, Playwright (installed; no e2e tests written yet), Vercel (Hobby).
 
 Commands: `npm run dev | build | lint | typecheck | test | test:db | sec:tickers | sec:sync | dev:sec-fixtures`
-- `npm test`: unit tests (currently 211). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
+- `npm test`: unit tests (currently 213). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
   55 RLS and ownership assertions (35 accounts + 20 SEC data) (no Docker needed; needs PG server binaries, which the cloud container has).
 - Before every commit: lint, typecheck, test, build all clean; run `test:db` when SQL changes.
 
@@ -128,7 +128,7 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - **Done and verified live by the owner:** register, email confirmation, sign-in, session survives refresh, profile and
   username (14-day rule), preferences, password change, sign-out/in, password reset, header account menu.
 - **Not confirmed:** account deletion (needs `SUPABASE_SECRET_KEY`; owner was told to test it last).
-- **Built (milestones 3, 4, 4b):** SEC data layer, global search, company pages, Numbers sample page, and the data pipeline (sync job, database tables, lookup with queue). Tested in a real browser against a fake SEC server (20 checks), plus 211 unit tests and 55 database tests. **Real-world status:** SQL migration applied by the owner (verified: tables exist, RLS correct). The GitHub run was refused by the SEC; next is the owner running `bash scripts/mac-sync.sh` once on their Mac. Until then the live site shows saved copies for the 3 sample companies. See docs/NEXT_STEPS.md.
+- **Built (milestones 3, 4, 4b):** SEC data layer, global search, company pages, Numbers sample page, and the data pipeline (sync job, database tables, lookup with queue). Tested in a real browser against a fake SEC server (20 checks), plus 213 unit tests and 55 database tests. **Real-world status:** SQL migration applied by the owner (verified: tables exist, RLS correct). The GitHub run was refused by the SEC; next is the owner running `bash scripts/mac-sync.sh` once on their Mac. Until then the live site shows saved copies for the 3 sample companies. See docs/NEXT_STEPS.md.
 - **Not built:** milestones 5–9: trend charts, comparison, watchlists, notes. **No prices** (owner decision): no price chart, market cap or valuation ratios.
 - Known gaps: no e2e (Playwright) tests; no terms/privacy pages (the register form says "once they are published"); no custom SMTP.
 

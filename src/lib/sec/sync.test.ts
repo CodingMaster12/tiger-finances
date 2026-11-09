@@ -168,12 +168,32 @@ describe("runSync: failures", () => {
     expect(s.saved).toBe(1);
     expect(t.results).toContainEqual({ cik: "0000000001", error: "not_covered" });
   });
-  it("stops at once when the SEC refuses the connection, without touching anything", async () => {
+  it("carries on when only the company-list server refuses, because the data server may still accept us", async () => {
+    const t = setup({
+      fetch: async (url) => {
+        if (url.endsWith("company_tickers_exchange.json")) throw new SecError("rate_limited", "403");
+        const m = url.match(/CIK(\d{10})\.json$/)!;
+        return fixture(NAMES[m[1]], url.includes("/submissions/") ? "submissions" : "facts");
+      },
+    });
+    const s = await runSync(opts({ ciks: ["320193"] }), t.deps);
+    expect(s).toMatchObject({ listUpdated: false, saved: 1, blocked: false });
+    expect(t.logs.join(" ")).toMatch(/company-list server \(www\.sec\.gov\) refused/);
+  });
+  it("stops at once, changing nothing, when the data server refuses the connection", async () => {
     const t = setup({ fetch: async () => Promise.reject(new SecError("rate_limited", "403")) });
-    const s = await runSync(opts({ seedTickers: ["AAPL", "SHOP"] }), t.deps);
+    const s = await runSync(opts({ ciks: ["320193", "1594805"] }), t.deps);
     expect(s).toMatchObject({ blocked: true, saved: 0, listUpdated: false });
-    expect(t.requested).toHaveLength(1); // only the company list was tried
+    expect(t.requested.filter((u) => u.includes("data.sec.gov"))).toHaveLength(1); // gave up after the first data request
     expect(t.saved.size).toBe(0);
+  });
+  it("uses a company list supplied from a file instead of fetching one", async () => {
+    const t = setup();
+    const rows = [[320193, "Apple Inc.", "AAPL", "Nasdaq"], [1594805, "SHOPIFY INC.", "SHOP", "Nasdaq"]] as [number, string, string, string | null][];
+    const s = await runSync(opts({ seedTickers: ["SHOP"], listRows: rows }), t.deps);
+    expect(s).toMatchObject({ listUpdated: true, saved: 1 });
+    expect(t.getList()).toEqual(rows);
+    expect(t.requested.some((u) => u.endsWith("company_tickers_exchange.json"))).toBe(false);
   });
   it("stops mid-run if the SEC starts refusing, keeping what was already saved", async () => {
     let n = 0;
