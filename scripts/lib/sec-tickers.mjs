@@ -3,7 +3,7 @@
 export const TICKER_URL = "https://www.sec.gov/files/company_tickers_exchange.json";
 export const SNAPSHOT_FILE = new URL("../../src/lib/sec/data/company-tickers.json", import.meta.url);
 
-export const isValidUserAgent = (ua) => typeof ua === "string" && /@|https?:\/\//.test(ua);
+export const isValidUserAgent = (ua) => typeof ua === "string" && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(ua) && !/https?:\/\//i.test(ua);
 
 export async function downloadTickerSnapshot(userAgent, { timeoutMs = 30_000, url = TICKER_URL } = {}) {
   const res = await fetch(url, {

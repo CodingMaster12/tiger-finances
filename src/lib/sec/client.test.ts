@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 
 vi.mock("server-only", () => ({}));
-import { createSecClient, resolveDataOrigin, resolveUserAgent } from "./client";
+import { createSecClient, isAcceptableUserAgent, resolveDataOrigin, resolveUserAgent } from "./client";
 import { SecError } from "./types";
 
 const json = (body: unknown, status = 200, headers: Record<string, string> = {}) =>
@@ -9,12 +9,22 @@ const json = (body: unknown, status = 200, headers: Record<string, string> = {})
 const fast = { userAgent: "Test test@example.com", minIntervalMs: 0, baseBackoffMs: 1, random: () => 0 };
 
 describe("resolveUserAgent", () => {
-  it("returns a configured agent that includes a contact", () => {
+  it("returns a configured agent that is a name plus an email", () => {
     expect(resolveUserAgent({ SEC_USER_AGENT: "Tiger Finances me@example.com" })).toBe("Tiger Finances me@example.com");
-    expect(resolveUserAgent({ SEC_USER_AGENT: "Tiger https://example.com" })).toContain("https://example.com");
   });
-  it("rejects an agent with no contact", () => {
+  it("rejects an agent with no email", () => {
     expect(() => resolveUserAgent({ SEC_USER_AGENT: "Tiger Finances" })).toThrowError(SecError);
+  });
+  it("rejects web-link style agents, which the SEC refuses", () => {
+    expect(() => resolveUserAgent({ SEC_USER_AGENT: "Tiger Finances https://github.com/CodingMaster12/tiger-finances" })).toThrowError(/no web link/);
+    expect(() => resolveUserAgent({ SEC_USER_AGENT: "Tiger me@example.com https://example.com" })).toThrowError(SecError);
+  });
+  it("isAcceptableUserAgent accepts only name-plus-email lines", () => {
+    expect(isAcceptableUserAgent("Tiger Finances a.b@example.co.uk")).toBe(true);
+    expect(isAcceptableUserAgent("Tiger Finances")).toBe(false);
+    expect(isAcceptableUserAgent("me@example.com https://x.com")).toBe(false);
+    expect(isAcceptableUserAgent("")).toBe(false);
+    expect(isAcceptableUserAgent(undefined)).toBe(false);
   });
   it("fails closed in production when unset, but works in development", () => {
     expect(() => resolveUserAgent({ NODE_ENV: "production" })).toThrowError(/SEC_USER_AGENT/);

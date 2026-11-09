@@ -36,7 +36,7 @@ Next.js 16 (App Router, `cacheComponents` on), React 19, strict TypeScript, Tail
 Supabase (Auth + Postgres + RLS) via `@supabase/ssr`, Vitest, Playwright (installed; no e2e tests written yet), Vercel (Hobby).
 
 Commands: `npm run dev | build | lint | typecheck | test | test:db | sec:tickers | sec:sync | dev:sec-fixtures`
-- `npm test`: unit tests (currently 213). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
+- `npm test`: unit tests (currently 215). `npm run test:db`: applies migrations to a throwaway local Postgres 16 and runs
   55 RLS and ownership assertions (35 accounts + 20 SEC data) (no Docker needed; needs PG server binaries, which the cloud container has).
 - Before every commit: lint, typecheck, test, build all clean; run `test:db` when SQL changes.
 
@@ -94,13 +94,14 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
   The GitHub workflow's daily schedule was removed; the manual button remains only to retry later.
 - **The SEC blocks Vercel too** (verified live: company pages got 403s). Never call the SEC from the website as the main path; the sync job fills the database. The 403 handling
   fails fast (one retry). GitHub Actions cannot be controlled from the cloud session (proxy blocks the Actions API), so the owner triggers/monitors it.
+- **User-Agent rule (verified 2026-11-09 on four networks):** `SEC_USER_AGENT` must be a name plus an email, e.g. `Tiger Finances you@example.com`, with NO web link. The identical request is refused (403 "Undeclared Automated Tool") when the line contains a URL and accepted (200) without one; the owner's Mac tested both a name+no-URL line and a generic one successfully. Code enforces it (`isAcceptableUserAgent`). The earlier Vercel/GitHub/cloud 403s were all sent with the URL form, so those networks may work again with an email line (not yet re-tested; the owner must update `SEC_USER_AGENT` in Vercel, GitHub secrets and the Claude environment). `www.sec.gov/files/company_tickers_exchange.json` refuses scripts regardless of the line, so the company list is supplied from a file the owner saves in Chrome (`--list-file`, auto-detected in ~/Downloads by `mac-sync.sh`).
 - **SEC rules:** max 10 req/s total, declared User-Agent with contact (`SEC_USER_AGENT`, required in production), cache hard. The SEC throttles shared cloud IPs (HTTP 403 "Request Rate Threshold Exceeded", lifts after ~10 min); the cloud container hit this repeatedly. Never loop on 403. Only `data.sec.gov` is fetched live; the ticker list is a committed snapshot.
 - EDGAR facts: `fy`/`fp` describe the filing, not the period; use start/end dates. Per-share values are never derived by subtraction. Never convert currencies in the SEC layer.
 - **Cache Components rules hit in milestone 4:** a Client Component using `usePathname()` must sit inside `<Suspense>` (NavLinks does) or any dynamic route fails
   `next build`; a dynamic page that reads the clock or fetches must call `await connection()` first (company page does). `notFound()` inside `<Suspense>`
   shows the 404 UI but returns HTTP 200 (known limitation). Run `npm run build`, not just dev, after touching routes.
 - **Testing SEC features from the cloud:** the SEC blocks the container, so run `npm run dev:sec-fixtures` (fake data.sec.gov on :4010, serves the saved fixtures;
-  `--block` simulates a 403) and start dev with `SEC_DATA_ORIGIN=http://localhost:4010 SEC_USER_AGENT="Tiger Finances https://github.com/CodingMaster12/tiger-finances"`.
+  `--block` simulates a 403) and start dev with `SEC_DATA_ORIGIN=http://localhost:4010 SEC_USER_AGENT="Tiger Finances dev@example.com"`.
   Special CIKs: `0000000001` = no financial data, `0000000002` = always 403. The override is ignored in production on purpose.
 - The full company list is saved to the database by the sync job. `npm run sec:tickers` still refreshes the small committed starter list by hand (fallback only).
 - Unit tests are hermetic: `vitest.config.ts` blanks the Supabase/SEC env vars and aliases `server-only`, so tests never touch a real project.
@@ -128,12 +129,12 @@ Migrations are applied by the owner by pasting into the Supabase SQL Editor. Giv
 - **Done and verified live by the owner:** register, email confirmation, sign-in, session survives refresh, profile and
   username (14-day rule), preferences, password change, sign-out/in, password reset, header account menu.
 - **Not confirmed:** account deletion (needs `SUPABASE_SECRET_KEY`; owner was told to test it last).
-- **Built (milestones 3, 4, 4b):** SEC data layer, global search, company pages, Numbers sample page, and the data pipeline (sync job, database tables, lookup with queue). Tested in a real browser against a fake SEC server (20 checks), plus 213 unit tests and 55 database tests. **Real-world status:** SQL migration applied by the owner (verified: tables exist, RLS correct). The GitHub run was refused by the SEC; next is the owner running `bash scripts/mac-sync.sh` once on their Mac. Until then the live site shows saved copies for the 3 sample companies. See docs/NEXT_STEPS.md.
+- **Built (milestones 3, 4, 4b):** SEC data layer, global search, company pages, Numbers sample page, and the data pipeline (sync job, database tables, lookup with queue). Tested in a real browser against a fake SEC server (20 checks), plus 215 unit tests and 55 database tests. **Real-world status:** SQL migration applied by the owner (verified: tables exist, RLS correct). The GitHub run was refused by the SEC; next is the owner running `bash scripts/mac-sync.sh` once on their Mac. Until then the live site shows saved copies for the 3 sample companies. See docs/NEXT_STEPS.md.
 - **Not built:** milestones 5–9: trend charts, comparison, watchlists, notes. **No prices** (owner decision): no price chart, market cap or valuation ratios.
 - Known gaps: no e2e (Playwright) tests; no terms/privacy pages (the register form says "once they are published"); no custom SMTP.
 
 ## Roadmap (owner approved the plan; ask before each milestone starts)
-3. **Data layer: DONE (code).** SEC EDGAR fundamentals only; prices deferred (owner choice a). See `docs/SEC_EDGAR.md` and DECISIONS.md. Contact chosen: `SEC_USER_AGENT=Tiger Finances https://github.com/CodingMaster12/tiger-finances` (owner must still set it in Vercel + Claude env). Open: run `npm run sec:tickers` on the owner's computer; retry the live SEC check.
+3. **Data layer: DONE (code).** SEC EDGAR fundamentals only; prices deferred (owner choice a). See `docs/SEC_EDGAR.md` and DECISIONS.md. Contact line: **name + email, no web link** (see the SEC rules gotcha); the owner chooses the email.
 4. **Global search + company overview page + data pipeline: DONE (code; needs the owner's one-time setup in docs/NEXT_STEPS.md to go live with real data).** 5. Statements (annual + quarterly) + trend charts (revenue, earnings, margins, FCF; no price chart).
 6. Comparison (2–3 companies, normalize returns, handle currency/period mismatches, saved comparisons).
 7. Watchlists, notes, recently viewed, preferences. 8. Visual QA (browser), accessibility, e2e tests. 9. Docs and delivery.

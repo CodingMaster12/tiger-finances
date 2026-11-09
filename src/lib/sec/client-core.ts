@@ -20,11 +20,20 @@ export function resolveDataOrigin(env: Record<string, string | undefined> = proc
 
 const DEV_USER_AGENT = "TigerFinances-dev/0.1 (local development; set SEC_USER_AGENT)";
 
-/** SEC_USER_AGENT must name the app and a contact, e.g. "Tiger Finances you@example.com". */
+/**
+ * The SEC's required format is a name plus an email address, e.g. "Tiger Finances you@example.com".
+ * Verified 2026-11-09 from four networks (Vercel, GitHub, the cloud session, the owner's Mac): the same request is
+ * refused ("Undeclared Automated Tool", HTTP 403) when the line contains a web link and accepted when it does not.
+ */
+export function isAcceptableUserAgent(ua: string | null | undefined): boolean {
+  return typeof ua === "string" && /[^\s@]+@[^\s@]+\.[^\s@]+/.test(ua) && !/https?:\/\//i.test(ua);
+}
+
+/** SEC_USER_AGENT must name the app and an email contact, with no web link. */
 export function resolveUserAgent(env: Record<string, string | undefined> = process.env): string {
   const ua = env.SEC_USER_AGENT?.trim();
   if (ua) {
-    if (!/@|https?:\/\//.test(ua)) throw new SecError("config", "SEC_USER_AGENT must include a contact email or website.");
+    if (!isAcceptableUserAgent(ua)) throw new SecError("config", 'SEC_USER_AGENT must be a name plus an email address, like "Tiger Finances you@example.com", with no web link.');
     return ua;
   }
   if (env.NODE_ENV === "production") throw new SecError("config", "SEC_USER_AGENT is not set.");

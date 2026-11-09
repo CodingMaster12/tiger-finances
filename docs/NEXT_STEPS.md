@@ -18,8 +18,7 @@
 4. Allow Claude to push to this repo: install the Claude GitHub App on it
    (https://github.com/apps/claude/installations/select_target) or reconnect GitHub at
    claude.ai → Settings → Connectors.
-5. SEC data needs no key, only a contact line. Set `SEC_USER_AGENT` to exactly `Tiger Finances https://github.com/CodingMaster12/tiger-finances` in the Claude environment and in Vercel (same way as step 2/3). Required in production. Then retry the live SEC check in a fresh session (the cloud address was being refused as an "undeclared automated tool").
-6. (Optional now: the site tries this itself on every build once step 5 is done.) On your own computer (not the cloud, whose address the SEC throttles) run once: `SEC_USER_AGENT="Tiger Finances https://github.com/CodingMaster12/tiger-finances" npm run sec:tickers`, then commit `src/lib/sec/data/company-tickers.json`. Until then search only knows three starter companies.
+5. SEC data needs no key, only a contact line: your app name plus an email, e.g. `Tiger Finances you@example.com` (NO web link: the SEC refuses those). The Mac helper asks for it. Also update `SEC_USER_AGENT` to that value in Vercel and the Claude environment (and the GitHub secret if you try the workflow again).
 
 ## Open items
 - Theme: light only for now (dark tokens staged, no setting yet).
@@ -30,8 +29,7 @@ The SEC refuses Vercel's servers (confirmed on the live site), so company data i
 Status: SQL applied (verified from the cloud: tables exist, public tables readable and empty, queue private). GitHub's servers were refused by the SEC (403), so the job runs on the owner's Mac.
 Owner steps (Mac):
 1. Download `https://github.com/CodingMaster12/tiger-finances/archive/refs/heads/main.zip` (or the milestone-4c-mac-sync branch zip before it is merged) and double-click it in Downloads to unzip.
-2. Install Node.js if needed: nodejs.org, big green LTS button, open the file, Continue until done (the script tells you if it is missing).
-3. Open Terminal (Cmd+Space, type Terminal, Enter) and run: `bash ~/Downloads/tiger-finances-main/scripts/mac-sync.sh` (folder name = the zip's folder).
-4. First run only: paste the Supabase project URL, then the Supabase secret key (hidden as you type; never paste it in chat). Wait 1-3 minutes for "Finished".
-5. Re-run the same command whenever you want newer data or to add companies visitors asked for (the queue is processed each run). It is safe to run any time.
-Optional later: schedule it automatically on the Mac (launchd) if wanted.
+2. In Chrome open `https://www.sec.gov/files/company_tickers_exchange.json`, press Cmd+S and save it into Downloads (the SEC's list page refuses scripts but not browsers). The helper finds it by itself.
+3. Open Terminal and run: `bash ` then drag `scripts/mac-sync.sh` from the unzipped folder into the window, Enter.
+4. First run only: Supabase project URL, then the Supabase secret key (hidden; never paste it in chat), then a contact email for the SEC. Wait 1-3 minutes for "Finished".
+5. Re-run whenever you want newer data or to add companies visitors asked for. Safe to repeat.

@@ -2,7 +2,7 @@
  * Data-sync job: downloads company filings from the SEC and saves them in Supabase.
  * Run it from a connection the SEC accepts (GitHub's scheduled jobs, or your own computer). Normal use:
  *
- *   SEC_USER_AGENT="Tiger Finances https://github.com/CodingMaster12/tiger-finances" \
+ *   SEC_USER_AGENT="Tiger Finances you@example.com" \
  *   NEXT_PUBLIC_SUPABASE_URL=... SUPABASE_SECRET_KEY=... npm run sec:sync
  *
  * Options:
@@ -16,7 +16,7 @@
  */
 import { readFileSync } from "node:fs";
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-import { createSecClient, resolveDataOrigin } from "../src/lib/sec/client-core";
+import { createSecClient, isAcceptableUserAgent, resolveDataOrigin } from "../src/lib/sec/client-core";
 import { SecError } from "../src/lib/sec/types";
 import { runSync, type SyncStore } from "../src/lib/sec/sync";
 import { parseTickerFile } from "../src/lib/sec/ticker-file";
@@ -78,7 +78,7 @@ function makeFetch(): { fetchJson: (url: string) => Promise<unknown>; now: () =>
     };
   }
   const userAgent = process.env.SEC_USER_AGENT;
-  if (!userAgent || !/@|https?:\/\//.test(userAgent)) die('SEC_USER_AGENT must be set, e.g. "Tiger Finances https://github.com/CodingMaster12/tiger-finances".');
+  if (!isAcceptableUserAgent(userAgent)) die('SEC_USER_AGENT must be a name plus an email address with no web link, e.g. "Tiger Finances you@example.com". (The SEC refuses lines that contain a web link.)');
   // Stay well under the SEC's 10 requests/second.
   return { fetchJson: createSecClient({ userAgent, minIntervalMs: 250 }).getJson, now: () => new Date() };
 }

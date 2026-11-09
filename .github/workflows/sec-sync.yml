@@ -5,7 +5,7 @@
 # the manual button can be tried again later (the SEC's blocking can change).
 #
 # Needs three repository secrets (Settings > Secrets and variables > Actions):
-#   SEC_USER_AGENT               Tiger Finances https://github.com/CodingMaster12/tiger-finances
+#   SEC_USER_AGENT               Tiger Finances you@example.com   (name + an email; NO web link, the SEC refuses those)
 #   NEXT_PUBLIC_SUPABASE_URL     your Supabase project URL
 #   SUPABASE_SECRET_KEY          your Supabase secret key (never put it in code or chat)
 name: Sync SEC data
